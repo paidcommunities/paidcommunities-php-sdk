@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+        bootstrap="tests/bootstrap.php"
+        backupGlobals="false"
+        colors="true"
+        convertErrorsToExceptions="false"
+        convertNoticesToExceptions="false"
+        convertWarningsToExceptions="false"
+        verbose="true"
+>
+    <testsuites>
+        <testsuite name="Paid Communities PHP SDK Tests">
+            <directory suffix=".php">./tests/php</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="WORDPRESS_DIR" value="/Applications/MAMP/htdocs/paymentplugins"/>
+    </php>
+</phpunit>

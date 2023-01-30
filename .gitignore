@@ -21,3 +21,9 @@ node_modules/
 *.log
 *.sql
 *.sqlite
+
+/vendor/
+
+.idea
+
+.phpunit.result.cache
