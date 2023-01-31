@@ -1,6 +1,6 @@
 <?php
 
-namespace PaidCommunities;
+namespace PaidCommunities\Model;
 
 interface ModelInterface {
 

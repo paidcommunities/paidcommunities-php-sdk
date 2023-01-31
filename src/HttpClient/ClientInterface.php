@@ -4,7 +4,7 @@ namespace PaidCommunities\HttpClient;
 
 interface ClientInterface {
 
-	public function request( $method, $path );
+	public function request( $method, $path, $request );
 
 	function getBaseUrl();
 }

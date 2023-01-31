@@ -10,7 +10,7 @@ class BaseServiceFactory extends AbstractServiceFactory {
 
 	public function __get( $name ) {
 		if ( ! isset( $this->mappings[ $name ] ) ) {
-			throw new \Exception( sprintf( 'Service %s has not been declares in the class mappings', $name ) );
+			throw new \Exception( sprintf( 'Service %s has not been declared in the class mappings', $name ) );
 		}
 
 		return $this->getService( $name, $this->mappings[ $name ] );

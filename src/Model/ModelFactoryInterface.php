@@ -4,5 +4,6 @@ namespace PaidCommunities\Model;
 
 interface ModelFactoryInterface {
 
-	function buildModel( $response );
+	function buildModel( $clazz, $response );
+
 }

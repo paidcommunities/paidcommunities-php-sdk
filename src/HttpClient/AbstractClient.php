@@ -7,7 +7,7 @@ use PaidCommunities\Exception\BadRequestException;
 use PaidCommunities\Exception\NotFoundException;
 use PaidCommunities\Util\GeneralUtils;
 
-class AbstractClient implements ClientInterface {
+abstract class AbstractClient implements ClientInterface {
 
 	const SANDBOX = 'sandbox';
 
@@ -27,13 +27,13 @@ class AbstractClient implements ClientInterface {
 
 	private $environment;
 
+	protected $serviceFactory;
+
 	public function __construct( $environment = self::PRODUCTION ) {
 		$this->environment = $environment;
 	}
 
-	public function request( $method, $path ) {
-
-	}
+	abstract function request( $method, $path, $request );
 
 	public function get( $path ) {
 		return $this->request( 'get', $path );
@@ -54,14 +54,13 @@ class AbstractClient implements ClientInterface {
 	protected function handleStatusCode( $code, $body ) {
 		switch ( $code ) {
 			case 400:
-				throw new BadRequestException();
+				throw BadRequestException::factory( $code, $body );
 			case 401:
-				throw new AuthenticationException();
-				break;
+				throw AuthenticationException::factory( $code, $body );
 			case 403:
 				break;
 			case 404:
-				throw new NotFoundException();
+				throw NotFoundException::factory( $code, $body );
 			case 405:
 				break;
 		}
@@ -78,5 +77,17 @@ class AbstractClient implements ClientInterface {
 
 	protected function buildUrl( $path ) {
 		return $this->getBaseUrl() . '/' . GeneralUtils::trimPath( $path );
+	}
+
+	public function prepareRequest( $body = null ) {
+		$args    = [];
+		$headers = [
+			'Content-Type' => 'application/json'
+		];
+		if ( $body && $headers['Content-Type'] === 'application/json' ) {
+			$body = json_encode( $body );
+		}
+
+		return [ $headers, $body ];
 	}
 }
