@@ -1,6 +1,5 @@
 <?php
 
-namespace php;
 
 use PaidCommunities\Exception\ApiErrorException;
 use Paidcommunities\Model\SoftwareUpdate;
@@ -9,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 class WordpressClientTest extends TestCase {
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function testClient() {
 		$client = new WordPressClient( WordPressClient::SANDBOX );
 		try {
@@ -18,6 +20,9 @@ class WordpressClientTest extends TestCase {
 		}
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function testService() {
 		$client = new WordPressClient( WordPressClient::SANDBOX );
 		try {

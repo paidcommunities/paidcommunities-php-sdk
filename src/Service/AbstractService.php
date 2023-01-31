@@ -47,10 +47,6 @@ class AbstractService implements ServiceInterface {
 		return $this->request( 'put', $path, $request, $model );
 	}
 
-	public function delete( $path, $request = [], $model = null ) {
-		return $this->request( 'delete', $path, $request, $model );
-	}
-
 	protected function buildPath( $path = '', ...$args ) {
 		if ( $path ) {
 			$path = '/' . GeneralUtils::trimPath( $path );

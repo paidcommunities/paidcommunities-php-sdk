@@ -8,7 +8,7 @@ abstract class AbstractModelFactory implements ModelFactoryInterface {
 
 	public function buildModel( $clazz, $response ) {
 		// build the model class from the response
-		$model = new $clazz();
+		$model = $clazz ? new $clazz() : new \stdClass();
 		foreach ( $response as $key => $value ) {
 			if ( \is_array( $value ) ) {
 				if ( $this->hasClass( $key ) ) {

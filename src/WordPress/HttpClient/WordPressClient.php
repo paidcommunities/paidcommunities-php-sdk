@@ -5,10 +5,13 @@ namespace PaidCommunities\WordPress\HttpClient;
 use PaidCommunities\HttpClient\AbstractClient;
 use PaidCommunities\Model\BaseModelFactory;
 use PaidCommunities\Service\BaseServiceFactory;
+use PaidCommunities\Service\DomainService;
+use Paidcommunities\Service\LicenseService;
 use PaidCommunities\Service\UpdateService;
 
 /**
  * @property UpdateService $updates
+ * @property DomainService $domains
  */
 class WordPressClient extends AbstractClient {
 

@@ -13,4 +13,8 @@ class AbstractModel implements ModelInterface {
 	public function __get( $name ) {
 		return $this->data[ $name ] ?? null;
 	}
+
+	public function __isset( $name ) {
+		return \array_key_exists( $name, $this->data );
+	}
 }
