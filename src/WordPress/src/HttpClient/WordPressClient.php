@@ -6,7 +6,7 @@ use PaidCommunities\HttpClient\AbstractClient;
 use PaidCommunities\Model\BaseModelFactory;
 use PaidCommunities\Service\BaseServiceFactory;
 use PaidCommunities\Service\DomainService;
-use Paidcommunities\Service\LicenseService;
+use PaidCommunities\Service\LicenseService;
 use PaidCommunities\Service\UpdateService;
 
 /**

@@ -1,9 +1,10 @@
 {
   "name": "paidcommunities/paidcommunities-php",
-  "description": "PHP SDK for the Paid Commuities API",
+  "description": "PHP SDK for the Paid Communities API",
   "autoload": {
     "psr-4": {
-      "PaidCommunities\\": "src/"
+      "PaidCommunities\\": "src/",
+      "PaidCommunities\\WordPress\\": "src/WordPress/src"
     }
   },
   "authors": [
