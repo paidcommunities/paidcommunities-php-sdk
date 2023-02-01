@@ -1,9 +1,11 @@
 const path = require('path');
+const glob = require('glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const WebpackRTLPlugin = require('webpack-rtl-plugin');
 const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 const {kebabCase} = require('lodash');
+const fs = require("fs");
 
 const env = process.env.NODE_ENV || 'development';
 const isDev = env === 'development';
@@ -91,5 +93,62 @@ const javascript = {
     }
 }
 
-module.exports = [javascript];
+const styling = {
+    ...defaults,
+    entry: {
+        styles: glob.sync('./assets/css/**/*.{css,scss}')
+    },
+    output: {
+        path: path.resolve(__dirname, './build')
+    },
+    module: {
+        rules: [
+            {
+                test: /\.?scss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader'
+                ]
+            }
+        ]
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: () => {
+                return '[name].css';
+            }
+        }),
+        new WebpackRTLPlugin({
+            filename: '[name]-rtl.css',
+            minify: {
+                safe: true
+            }
+        }),
+        {
+            apply(compiler) {
+                compiler.hooks.afterEmit.tap('afterEmit', this.deleteFiles.bind(this));
+            },
+            deleteFiles() {
+                let files = glob.sync('./build/css/style.js');
+                files.forEach(file => {
+                    fs.unlink(file, (err) => {
+                        if (err) {
+                            console.log(`error removing file ${file}.`, err);
+                        }
+                    })
+                })
+            }
+        }
+        //new RemoveFilePlugin('./packages/blocks/build/styles.js')
+    ],
+    optimization: {
+        minimizer: [
+            new CssMinimizerPlugin()
+        ]
+    },
+
+}
+
+module.exports = [javascript, styling];
 

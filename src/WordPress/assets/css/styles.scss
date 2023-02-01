@@ -1,0 +1,47 @@
+.pc-license-settings {
+  max-width: 700px;
+
+  .pc-license-settings__header {
+    h2 {
+      font-size: 2em;
+    }
+  }
+}
+
+.pc-row {
+  display: flex;
+  width: 100%;
+  margin-bottom: 12px;
+
+  .pc-grid {
+    width: 100%;
+  }
+}
+
+.pc-paper {
+  padding: 16px 16px;
+  background-color: rgb(255, 255, 255);
+  color: rgba(0, 0, 0, 0.87);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-radius: 4px;
+  box-shadow: rgb(0 0 0 / 20%) 0px 3px 3px -2px, rgb(0 0 0 / 14%) 0px 3px 4px 0px, rgb(0 0 0 / 12%) 0px 1px 8px 0px;
+}
+
+.pc-input-field {
+  display: flex;
+  flex-direction: column;
+
+  input {
+    &[type="text"] {
+      padding: 16.5px 14px;
+      height: 1.4375em;
+    }
+  }
+
+  label {
+    width: 100%;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 1.2em;
+  }
+}
