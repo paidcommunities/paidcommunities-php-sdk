@@ -40,6 +40,8 @@ class LicenseSettings {
 	}
 
 	public function render() {
+		$license    = $this->config->getLicense();
+		$buttonText = $license->isActive() ? 'Deactivate Site' : 'Activate Site';
 		wp_enqueue_script( 'paidcommunities-license' );
 		wp_enqueue_style( 'paidcommunities-styles' );
 		$this->data->print_data( 'paidCommunitiesLicenseParams' );
@@ -58,15 +60,16 @@ class LicenseSettings {
                             <div class="pc-grid">
                                 <div class="pc-input-field">
                                     <label>License Key</label>
-                                    <input type="text"/>
+                                    <input type="text" id="<?php echo $this->config->getPluginSlug() . '_license' ?>" name="<?php echo $this->config->getPluginSlug() . '_license' ?>" value="<?php echo $license->getMaskedKey() ?>"/>
                                 </div>
                             </div>
                         </div>
                         <div class="pc-row">
                             <div class="pc-grid">
-                                <button class="btn button-secondary pc-active-license">Activate</button>
+                                <button class="btn button-secondary paidcommunities-license-btn"><?php echo $buttonText ?></button>
                             </div>
                         </div>
+                        <div class="pc-notices"></div>
                     </div>
                 </div>
             </div>
@@ -79,6 +82,7 @@ class LicenseSettings {
 		$this->data->add( 'actions', [ 'activate' => "activate_{$this->config->getPluginSlug() }", 'deactivate' => "deactivate_{$this->config->getPluginSlug() }" ] );
 		$this->data->add( 'pluginName', $this->config->getPluginSlug() );
 		$this->data->add( 'license', $this->config->getLicense()->toArray() );
+		$this->data->add( 'i18n', [ 'activateMsg' => 'Activating...', 'deactivateMsg' => 'Deactivating...' ] );
 	}
 
 }

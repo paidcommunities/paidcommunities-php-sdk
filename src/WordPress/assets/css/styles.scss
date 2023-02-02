@@ -1,7 +1,9 @@
 .pc-license-settings {
   max-width: 700px;
+  padding: 16px;
 
   .pc-license-settings__header {
+
     h2 {
       font-size: 2em;
     }
@@ -43,5 +45,62 @@
     margin-bottom: 8px;
     font-weight: 500;
     font-size: 1.2em;
+  }
+}
+
+$error-text: rgb(95, 33, 32);
+$success-text: rgb(30, 70, 32);
+
+.pc-admin-notice {
+  display: flex;
+  padding: 6px 16px;
+  align-items: center;
+  margin: 16px 0px 0px;
+
+  .notice-message {
+    padding: 8px 0;
+  }
+
+  &.error-notice {
+    color: $error-text;
+    background-color: rgb(253, 237, 237);
+
+    .notice-icon {
+      color: rgb(211, 47, 47);
+    }
+  }
+
+  &.success-notice {
+    color: $success-text;
+    background-color: rgb(237, 247, 237);
+
+    .notice-icon {
+      color: rgb(46, 125, 50);
+    }
+  }
+
+  .notice-icon {
+    margin-right: 12px;
+    font-size: 22px;
+    width: 1em;
+    height: 1em;
+
+    svg {
+      fill: currentColor;
+    }
+  }
+
+  .notice-actions {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+
+    .close-notice-icon {
+      margin-right: 0;
+      cursor: pointer;
+      font-size: 22px;
+      width: 1em;
+      height: 1em;
+    }
   }
 }

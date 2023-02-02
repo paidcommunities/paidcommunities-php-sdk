@@ -29,7 +29,7 @@ const javascript = {
         filename: (chunkData) => {
             return `${kebabCase(chunkData.chunk.name)}.js`
         },
-        library: ['wcPPCP', '[name]'],
+        library: ['paidCommunities', '[name]'],
         libraryTarget: 'this'
     },
     module: {

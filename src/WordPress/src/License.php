@@ -90,4 +90,15 @@ class License {
 		return $this->status === self::ACTIVE;
 	}
 
+	public function getMaskedKey() {
+		if ( $this->key ) {
+			$length = strlen( $this->key ) - 4;
+			$key    = implode( '', array_fill( 0, $length, 'x' ) ) . substr( $this->key, $length );
+
+			return $key;
+		}
+
+		return $this->key;
+	}
+
 }

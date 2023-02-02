@@ -33,8 +33,8 @@ class PluginConfig {
 	private function initialize() {
 		//$this->settings  = $settings ?? new LicenseSettings( new AssetsApi( dirname( __DIR__ ), plugin_dir_url( __DIR__ ), $version ) );
 		$dir                  = PREMIUM_PLUGIN_DIR . '/vendor/paidcommunities/paidcommunities-php/src/WordPress/src';
-		$this->settings       = $settings ?? new LicenseSettings( $this, new AssetsApi( dirname( $dir ), plugin_dir_url( $dir ), $version ) );
-		$this->ajaxController = AdminAjaxController( $this->slug );
+		$this->settings       = $settings ?? new LicenseSettings( $this, new AssetsApi( dirname( $dir ), plugin_dir_url( $dir ), $this->version ) );
+		$this->ajaxController = new AdminAjaxController( $this );
 		$this->client         = new WordPressClient( WordPressClient::SANDBOX );
 	}
 
@@ -60,6 +60,9 @@ class PluginConfig {
 		return $this->slug;
 	}
 
+	/**
+	 * @return \PaidCommunities\WordPress\License
+	 */
 	public function getLicense() {
 		if ( ! $this->license ) {
 			$this->license = new License( $this->slug, $this->getOptionPrefix() );

@@ -10,6 +10,59 @@
 
 module.exports = window["jQuery"];
 
+/***/ }),
+
+/***/ "@babel/runtime/regenerator":
+/*!*************************************!*\
+  !*** external "regeneratorRuntime" ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = window["regeneratorRuntime"];
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _asyncToGenerator)
+/* harmony export */ });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+      args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+      _next(undefined);
+    });
+  };
+}
+
 /***/ })
 
 /******/ 	});
@@ -87,14 +140,117 @@ var __webpack_exports__ = {};
   !*** ./assets/js/license-settings.js ***!
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/regenerator */ "@babel/runtime/regenerator");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jquery */ "jquery");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_2__);
 
-var activateLicense = function activateLicense() {};
-var deactivateLicense = function deactivateLicense() {};
+
+
+var getValue = function getValue(key) {
+  return paidCommunitiesLicenseParams[key] || null;
+};
+var activate = function activate() {
+  var key = getValue('pluginName');
+  var id = "#".concat(key, "_license");
+  var license = jquery__WEBPACK_IMPORTED_MODULE_2___default()(id).val();
+  return new Promise(function (resolve) {
+    jquery__WEBPACK_IMPORTED_MODULE_2___default().ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: getValue('ajaxUrl'),
+      data: {
+        action: getValue('actions').activate,
+        license: license
+      }
+    }).done(function (response) {
+      return resolve(response);
+    }).fail(function (jqXHR) {
+      return resolve(response);
+    });
+  });
+};
+var deactivate = function deactivate() {
+  return new Promise(function (resolve) {
+    jquery__WEBPACK_IMPORTED_MODULE_2___default().ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: getValue('ajaxUrl'),
+      data: {
+        action: getValue('actions').deactivate
+      }
+    }).done(function (response) {
+      return resolve(response);
+    }).fail(function (jqXHR) {
+      return resolve(response);
+    });
+  });
+};
+var handleButtonClick = /*#__PURE__*/function () {
+  var _ref = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee(e) {
+    var response, $button, text, license, _response, _response$error;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          $button = jquery__WEBPACK_IMPORTED_MODULE_2___default()(e.currentTarget);
+          text = $button.text();
+          license = getValue('license');
+          _context.prev = 3;
+          if (!(license.status !== 'active')) {
+            _context.next = 11;
+            break;
+          }
+          $button.text(getValue('i18n').activateMsg);
+          _context.next = 8;
+          return activate();
+        case 8:
+          response = _context.sent;
+          _context.next = 15;
+          break;
+        case 11:
+          $button.text(getValue('i18n').deactivateMsg);
+          _context.next = 14;
+          return deactivate();
+        case 14:
+          response = _context.sent;
+        case 15:
+          if (response.success) {
+            _context.next = 17;
+            break;
+          }
+          return _context.abrupt("return", addErrorMessage((_response = response) === null || _response === void 0 ? void 0 : (_response$error = _response.error) === null || _response$error === void 0 ? void 0 : _response$error.message));
+        case 17:
+          return _context.abrupt("return", addErrorMessage(response.data.message));
+        case 20:
+          _context.prev = 20;
+          _context.t0 = _context["catch"](3);
+          return _context.abrupt("return", addErrorMessage(_context.t0.message));
+        case 23:
+          _context.prev = 23;
+          $button.text(text);
+          return _context.finish(23);
+        case 26:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee, null, [[3, 20, 23, 26]]);
+  }));
+  return function handleButtonClick(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+var addErrorMessage = function addErrorMessage(message) {
+  var $message = jquery__WEBPACK_IMPORTED_MODULE_2___default()(message);
+  $message.on('click', '.pc-close-notice', function () {
+    $message.remove();
+  });
+  jquery__WEBPACK_IMPORTED_MODULE_2___default()('.pc-notices').append($message);
+};
+jquery__WEBPACK_IMPORTED_MODULE_2___default()(document.body).on('click', '.paidcommunities-license-btn', handleButtonClick);
 })();
 
-(this.wcPPCP = this.wcPPCP || {}).licenseSettings = __webpack_exports__;
+(this.paidCommunities = this.paidCommunities || {}).licenseSettings = __webpack_exports__;
 /******/ })()
 ;
 //# sourceMappingURL=license-settings.js.map

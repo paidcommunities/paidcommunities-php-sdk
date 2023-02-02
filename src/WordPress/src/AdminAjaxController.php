@@ -2,6 +2,7 @@
 
 namespace PaidCommunities\WordPress;
 
+use PaidCommunities\WordPress\Html\Notice;
 use PaidCommunities\WordPress\HttpClient\WordPressClient;
 
 class AdminAjaxController {
@@ -22,8 +23,8 @@ class AdminAjaxController {
 	}
 
 	private function initialize() {
-		add_action( 'wp_ajax_' . $this->getActions()->activate . '_' . $this->name, [ $this, 'handleLicenseActivate' ] );
-		add_action( 'wp_ajax_' . $this->getActions()->deactivate . '_' . $this->name, [ $this, 'handleLicenseDeactivate' ] );
+		add_action( 'wp_ajax_' . $this->getActions()->activate . $this->name, [ $this, 'handleLicenseActivate' ] );
+		add_action( 'wp_ajax_' . $this->getActions()->deactivate . $this->name, [ $this, 'handleLicenseDeactivate' ] );
 	}
 
 	private function getActions() {
@@ -32,9 +33,10 @@ class AdminAjaxController {
 
 	public function handleLicenseActivate() {
 		// use the license key to activate the domain
-		$license    = $this->config->getLicense();
-		$client     = new WordPressClient( WordPressClient::SANDBOX );
-		$licenseKey = $_POST[ $this->name . '_license_key' ] ?? '';
+		$license = $this->config->getLicense();
+		$client  = new WordPressClient( WordPressClient::SANDBOX );
+		//$licenseKey = $_POST[ $this->name . '_license_key' ] ?? '';
+		$licenseKey = $_POST['license'] ?? '';
 		$domain     = $_SERVER['SERVER_NAME'] ?? '';
 		try {
 			if ( ! $licenseKey ) {
@@ -47,11 +49,11 @@ class AdminAjaxController {
 				'domain' => $domain
 			] );
 			$license->setKey( $licenseKey );
-			$license->setStatus( '' );
+			$license->setStatus( License::ACTIVE );
 			$license->setDomain( $domain->domain );
 			$license->setDomainId( $domain->id );
 			$license->save();
-			$this->send_ajax_success_response( $license );
+			$this->send_ajax_success_response( [ 'license' => $license->toArray(), 'message' => Notice::renderSuccess( 'Your site has been activated.' ) ] );
 		} catch ( \Exception $e ) {
 			$this->send_ajax_error_response( $e );
 		}
@@ -63,7 +65,13 @@ class AdminAjaxController {
 		try {
 			$id       = $license->getKey();
 			$response = $client->domains->delete( $id, $license->getDomainId() );
-			$this->send_ajax_success_response( $response );
+			$license->setKey( '' );
+			$license->setDomain( '' );
+			$license->setDomainId( '' );
+			$license->setStatus( License::INACTIVE );
+			$license->save();
+
+			$this->send_ajax_success_response( [ 'message' => Notice::renderSuccess( 'Your site has been deactivated.' ) ] );
 		} catch ( \Exception $e ) {
 			$this->send_ajax_error_response( $e );
 		}
@@ -80,7 +88,7 @@ class AdminAjaxController {
 		\wp_send_json( [
 			'success' => false,
 			'error'   => [
-				'message' => $e->getMessage()
+				'message' => Notice::renderError( $e->getMessage() )
 			]
 		] );
 	}

@@ -2,6 +2,7 @@
 
 namespace PaidCommunities\WordPress\HttpClient;
 
+use PaidCommunities\Exception\BadRequestException;
 use PaidCommunities\HttpClient\AbstractClient;
 use PaidCommunities\Model\BaseModelFactory;
 use PaidCommunities\Service\BaseServiceFactory;
@@ -45,6 +46,9 @@ class WordPressClient extends AbstractClient {
 	}
 
 	private function handleResponse( $response ) {
+		if ( \is_wp_error( $response ) ) {
+			throw BadRequestException::factory( 400, [ 'error' => [ 'message' => $response->get_error_message() ] ] );
+		}
 		$httpStatus = wp_remote_retrieve_response_code( $response );
 		$body       = json_decode( wp_remote_retrieve_body( $response ), true );
 		$this->handleStatusCode( $httpStatus, $body );
