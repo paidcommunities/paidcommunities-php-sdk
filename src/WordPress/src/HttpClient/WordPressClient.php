@@ -16,6 +16,8 @@ use PaidCommunities\Service\UpdateService;
  */
 class WordPressClient extends AbstractClient {
 
+	const REQUEST_URI = '/wordpress/v1';
+
 	private $http;
 
 	public function __construct( $environment = self::PRODUCTION ) {
@@ -32,12 +34,12 @@ class WordPressClient extends AbstractClient {
 	}
 
 	public function getBaseUrl() {
-		return parent::getBaseUrl() . '/v1/wordpress';
+		return parent::getBaseUrl() . self::REQUEST_URI;
 	}
 
 	public function request( $method, $path, $body = [] ) {
 		list( $headers, $body ) = $this->prepareRequest( $body );
-		$args = [ 'method' => strtoupper( $method ), 'headers' => $headers ];
+		$args = [ 'method' => strtoupper( $method ), 'headers' => $headers, 'timeout' => 30 ];
 		if ( $method !== 'get' && $body ) {
 			$args = wp_parse_args( [ 'body' => $body ], $args );
 		}

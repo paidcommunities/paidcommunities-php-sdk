@@ -197,44 +197,46 @@ var handleButtonClick = /*#__PURE__*/function () {
           text = $button.text();
           license = getValue('license');
           _context.prev = 3;
+          $button.prop('disabled', true);
           if (!(license.status !== 'active')) {
-            _context.next = 11;
+            _context.next = 12;
             break;
           }
           $button.text(getValue('i18n').activateMsg);
-          _context.next = 8;
+          _context.next = 9;
           return activate();
-        case 8:
+        case 9:
           response = _context.sent;
-          _context.next = 15;
+          _context.next = 16;
           break;
-        case 11:
+        case 12:
           $button.text(getValue('i18n').deactivateMsg);
-          _context.next = 14;
+          _context.next = 15;
           return deactivate();
-        case 14:
-          response = _context.sent;
         case 15:
+          response = _context.sent;
+        case 16:
           if (response.success) {
-            _context.next = 17;
+            _context.next = 18;
             break;
           }
           return _context.abrupt("return", addErrorMessage((_response = response) === null || _response === void 0 ? void 0 : (_response$error = _response.error) === null || _response$error === void 0 ? void 0 : _response$error.message));
-        case 17:
+        case 18:
           return _context.abrupt("return", addErrorMessage(response.data.message));
-        case 20:
-          _context.prev = 20;
+        case 21:
+          _context.prev = 21;
           _context.t0 = _context["catch"](3);
           return _context.abrupt("return", addErrorMessage(_context.t0.message));
-        case 23:
-          _context.prev = 23;
+        case 24:
+          _context.prev = 24;
+          $button.prop('disabled', false);
           $button.text(text);
-          return _context.finish(23);
-        case 26:
+          return _context.finish(24);
+        case 28:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[3, 20, 23, 26]]);
+    }, _callee, null, [[3, 21, 24, 28]]);
   }));
   return function handleButtonClick(_x) {
     return _ref.apply(this, arguments);

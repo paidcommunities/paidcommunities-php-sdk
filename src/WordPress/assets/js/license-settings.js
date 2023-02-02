@@ -46,6 +46,7 @@ const handleButtonClick = async e => {
     let text = $button.text();
     let license = getValue('license');
     try {
+        $button.prop('disabled', true);
         if (license.status !== 'active') {
             $button.text(getValue('i18n').activateMsg);
             response = await activate();
@@ -60,6 +61,7 @@ const handleButtonClick = async e => {
     } catch (error) {
         return addErrorMessage(error.message);
     } finally {
+        $button.prop('disabled', false);
         $button.text(text);
     }
 }
