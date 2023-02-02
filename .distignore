@@ -1,0 +1,12 @@
+/vendor
+/bin
+/tests
+.gitignore
+.distignore
+.env
+.phpunit.result.cache
+build.sh
+composer.lock
+package*.json
+phpunit.xml
+README.md

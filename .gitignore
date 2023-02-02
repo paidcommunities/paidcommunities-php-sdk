@@ -27,3 +27,5 @@ node_modules/
 .idea
 
 .phpunit.result.cache
+
+.env
