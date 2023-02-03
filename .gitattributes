@@ -1,0 +1,7 @@
+/bin export-ignore
+/tests export-ignore
+composer.* export-ignore
+build.sh
+package.json export-ignore
+package-lock.json export-ignore
+phpunit.xml export-ignore
