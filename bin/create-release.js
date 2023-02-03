@@ -52,7 +52,7 @@ const tag = process.env.GITHUB_TAG;
             repo: repo,
             release_id: release.data.id,
             data: data,
-            name: 'paidcommunities-php-sdk.zip',
+            name: 'v1.0.0.zip',
         });
         /*const result = await octokit.request(`POST /repos/{owner}/{repo}/releases/{release_id}/assets{?name}`, {
             owner: owner,
