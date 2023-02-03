@@ -1,9 +1,12 @@
 /vendor
+node_modules
 /bin
 /tests
+/build
 .gitignore
 .distignore
 .env
+.idea
 .phpunit.result.cache
 build.sh
 composer.lock

@@ -29,3 +29,7 @@ node_modules/
 .phpunit.result.cache
 
 .env
+
+/build
+
+.phpunit.result.cache
