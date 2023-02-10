@@ -50,10 +50,14 @@ class AdminAjaxController {
 			] );
 			$license->setKey( $licenseKey );
 			$license->setStatus( License::ACTIVE );
+			$license->setSecret( $domain->secret );
 			$license->setDomain( $domain->domain );
 			$license->setDomainId( $domain->id );
 			$license->save();
-			$this->send_ajax_success_response( [ 'license' => $license->toArray(), 'message' => Notice::renderSuccess( 'Your site has been activated.' ) ] );
+			$this->send_ajax_success_response( [
+				'license' => $license->toArray(),
+				'message' => Notice::renderSuccess( 'Your site has been activated.' )
+			] );
 		} catch ( \Exception $e ) {
 			$this->send_ajax_error_response( $e );
 		}
@@ -63,13 +67,12 @@ class AdminAjaxController {
 		$license = $this->config->getLicense();
 		$client  = new WordPressClient( WordPressClient::SANDBOX );
 		try {
-			$id       = $license->getKey();
-			$response = $client->domains->delete( $id, $license->getDomainId() );
-			$license->setKey( '' );
-			$license->setDomain( '' );
-			$license->setDomainId( '' );
-			$license->setStatus( License::INACTIVE );
-			$license->save();
+			$id = $license->getDomainId();
+			$client->setSecret( $license->getSecret() );
+
+			$response = $client->domains->delete( $id );
+
+			$license->delete();
 
 			$this->send_ajax_success_response( [ 'message' => Notice::renderSuccess( 'Your site has been deactivated.' ) ] );
 		} catch ( \Exception $e ) {

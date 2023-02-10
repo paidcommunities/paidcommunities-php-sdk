@@ -11,7 +11,7 @@ use PaidCommunities\Util\GeneralUtils;
  */
 class AbstractService implements ServiceInterface {
 
-	private $client;
+	protected $client;
 
 	private $models;
 
@@ -22,8 +22,8 @@ class AbstractService implements ServiceInterface {
 		$this->models = $models;
 	}
 
-	public function request( $method, $path, $request = [], $model = null ) {
-		$response = $this->client->request( $method, $path, $request );
+	public function request( $method, $path, $request = [], $model = null, $opts = [] ) {
+		$response = $this->client->request( $method, $path, $request, $opts );
 		if ( $response ) {
 			return $this->models->buildModel( $model, $response );
 		}

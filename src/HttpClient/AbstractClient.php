@@ -27,28 +27,31 @@ abstract class AbstractClient implements ClientInterface {
 
 	private $environment;
 
+	private $secret;
+
 	protected $serviceFactory;
 
-	public function __construct( $environment = self::PRODUCTION ) {
+	public function __construct( $environment = self::PRODUCTION, $secret = null ) {
 		$this->environment = $environment;
+		$this->secret      = $secret;
 	}
 
-	abstract function request( $method, $path, $request );
+	abstract function request( $method, $path, $request, $opts );
 
-	public function get( $path ) {
-		return $this->request( 'get', $path );
+	public function get( $path, $opts = [] ) {
+		return $this->request( 'get', $path, $opts );
 	}
 
-	public function post( $path, $args = [] ) {
-		return $this->request( 'post', $path, $args );
+	public function post( $path, $args = [], $opts = [] ) {
+		return $this->request( 'post', $path, $args, $opts );
 	}
 
-	public function put( $path, $args = [] ) {
-		return $this->request( 'put', $path, $args );
+	public function put( $path, $args = [], $opts = [] ) {
+		return $this->request( 'put', $path, $args, $opts );
 	}
 
-	public function delete( $path ) {
-		return $this->request( 'delete', $path );
+	public function delete( $path, $opts = [] ) {
+		return $this->request( 'delete', $path, null, $opts );
 	}
 
 	protected function handleStatusCode( $code, $body ) {
@@ -66,7 +69,15 @@ abstract class AbstractClient implements ClientInterface {
 		}
 	}
 
-	function getBaseUrl() {
+	public function getSecret() {
+		return $this->secret;
+	}
+
+	public function setSecret( $secret ) {
+		$this->secret = $secret;
+	}
+
+	public function getBaseUrl() {
 		switch ( $this->environment ) {
 			case self::PRODUCTION:
 				return self::PRODUCTION_URL;
@@ -81,13 +92,23 @@ abstract class AbstractClient implements ClientInterface {
 
 	public function prepareRequest( $body = null ) {
 		$args    = [];
-		$headers = [
-			'Content-Type' => 'application/json'
-		];
+		$headers = $this->getHeaders();
 		if ( $body && $headers['Content-Type'] === 'application/json' ) {
 			$body = json_encode( $body );
 		}
 
 		return [ $headers, $body ];
+	}
+
+	protected function getHeaders() {
+		return [
+			'Content-Type' => 'application/json'
+		];
+	}
+
+	public function getAuthorizationHeader() {
+		return [
+			'Authorization' => 'Bearer ' . $this->secret
+		];
 	}
 }

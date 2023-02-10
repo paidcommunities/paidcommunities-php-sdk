@@ -5,8 +5,9 @@ namespace PaidCommunities\Service;
 class BaseServiceFactory extends AbstractServiceFactory {
 
 	protected $mappings = [
-		'updates' => UpdateService::class,
-		'domains' => DomainService::class
+		'updates'            => UpdateService::class,
+		'domains'            => DomainService::class,
+		'domainRegistration' => DomainRegistrationService::class
 	];
 
 	public function __get( $name ) {

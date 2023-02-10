@@ -16,5 +16,6 @@
     <php>
         <env name="WORDPRESS_DIR" value="/Applications/MAMP/htdocs/paymentplugins"/>
         <env name="LICENSE" value="lic_Z1m2kTJiMnGBBXMXRZb40jVDLWj1DgfQ"/>
+        <env name="DOMAIN" value="example.com"/>
     </php>
 </phpunit>

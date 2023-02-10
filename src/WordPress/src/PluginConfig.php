@@ -22,20 +22,21 @@ class PluginConfig {
 
 	private $updates;
 
+	private $baseDir;
+
 	/**
 	 * @param string $slug The name of the plugin
 	 * @param string $version The current version of the plugin
 	 */
-	public function __construct( $slug, $version, $settings = null ) {
+	public function __construct( $slug, $version ) {
 		$this->slug    = $slug;
 		$this->version = $version;
+		$this->baseDir = dirname( __DIR__ );
 		$this->initialize();
 	}
 
 	private function initialize() {
-		//$this->settings  = $settings ?? new LicenseSettings( new AssetsApi( dirname( __DIR__ ), plugin_dir_url( __DIR__ ), $version ) );
-		$dir                  = PREMIUM_PLUGIN_DIR . '/vendor/paidcommunities/paidcommunities-php/src/WordPress/src';
-		$this->settings       = $settings ?? new LicenseSettings( $this, new AssetsApi( dirname( $dir ), plugin_dir_url( $dir ), $this->version ) );
+		$this->settings       = new LicenseSettings( $this, new AssetsApi( $this->baseDir, plugin_dir_url( __DIR__ ), $this->version ) );
 		$this->ajaxController = new AdminAjaxController( $this );
 		$this->client         = new WordPressClient( WordPressClient::SANDBOX );
 		$this->updates        = new UpdateController( $this, $this->client );
@@ -52,6 +53,13 @@ class PluginConfig {
 
 	public function getOptionName() {
 		return $this->getOptionPrefix() . $this->slug . '_settings';
+	}
+
+	/**
+	 * @return UpdateController
+	 */
+	public function getUpdateController() {
+		return $this->updates;
 	}
 
 	public function updateSettings( $data ) {

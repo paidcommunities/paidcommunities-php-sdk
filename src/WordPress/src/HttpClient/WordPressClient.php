@@ -6,6 +6,7 @@ use PaidCommunities\Exception\BadRequestException;
 use PaidCommunities\HttpClient\AbstractClient;
 use PaidCommunities\Model\BaseModelFactory;
 use PaidCommunities\Service\BaseServiceFactory;
+use PaidCommunities\Service\DomainRegistrationService;
 use PaidCommunities\Service\DomainService;
 use PaidCommunities\Service\LicenseService;
 use PaidCommunities\Service\UpdateService;
@@ -13,6 +14,7 @@ use PaidCommunities\Service\UpdateService;
 /**
  * @property UpdateService $updates
  * @property DomainService $domains
+ * @property DomainRegistrationService $domainRegistration
  */
 class WordPressClient extends AbstractClient {
 
@@ -37,8 +39,11 @@ class WordPressClient extends AbstractClient {
 		return parent::getBaseUrl() . self::REQUEST_URI;
 	}
 
-	public function request( $method, $path, $body = [] ) {
+	public function request( $method, $path, $body = [], $opts = [] ) {
 		list( $headers, $body ) = $this->prepareRequest( $body );
+		if ( isset( $opts['headers'] ) ) {
+			$headers = array_merge( $headers, $opts['headers'] );
+		}
 		$args = [ 'method' => strtoupper( $method ), 'headers' => $headers, 'timeout' => 30 ];
 		if ( $method !== 'get' && $body ) {
 			$args = wp_parse_args( [ 'body' => $body ], $args );

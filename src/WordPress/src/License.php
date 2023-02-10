@@ -10,6 +10,8 @@ class License {
 
 	private $key;
 
+	private $secret;
+
 	private $status;
 
 	private $domain;
@@ -31,9 +33,14 @@ class License {
 		\update_option( $this->getOptionName(), $this->toArray(), true );
 	}
 
+	public function delete() {
+		\delete_option( $this->getOptionName() );
+	}
+
 	public function read() {
 		$data             = \get_option( $this->getOptionName(), [] );
 		$this->key        = $data['key'] ?? '';
+		$this->secret     = $data['secret'] ?? '';
 		$this->status     = $data['status'] ?? self::INACTIVE;
 		$this->domain     = $data['domain'] ?? '';
 		$this->domainId   = $data['domainId'] ?? '';
@@ -46,6 +53,10 @@ class License {
 
 	public function getKey() {
 		return $this->key;
+	}
+
+	public function getSecret() {
+		return $this->secret;
 	}
 
 	public function getStatus() {
@@ -64,6 +75,10 @@ class License {
 		$this->key = $key;
 	}
 
+	public function setSecret( $secret ) {
+		$this->secret = $secret;
+	}
+
 	public function setStatus( $status ) {
 		$this->status = $status;
 	}
@@ -79,6 +94,7 @@ class License {
 	public function toArray() {
 		return [
 			'key'        => $this->key,
+			'secret'     => $this->secret,
 			'status'     => $this->status,
 			'domain'     => $this->domain,
 			'domainId'   => $this->domainId,

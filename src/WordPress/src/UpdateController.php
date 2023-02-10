@@ -35,11 +35,12 @@ class UpdateController {
 	public function checkPluginUpdates( $update, $pluginData, $pluginFile ) {
 		try {
 			$license = $this->config->getLicense();
-			$key     = $license->getKey();
+			$secret  = $license->getSecret();
 			$domain  = $license->getDomainId();
-			if ( $key && $domain ) {
+
+			if ( $secret && $domain ) {
+				$this->client->setSecret( $secret );
 				$response = $this->client->updates->check( [
-					'license' => $key,
 					'domain'  => $domain,
 					'version' => $pluginData['Version']
 				] );
