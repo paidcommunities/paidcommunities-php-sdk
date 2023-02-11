@@ -38,7 +38,7 @@ class PluginConfig {
 	private function initialize() {
 		$this->settings       = new LicenseSettings( $this, new AssetsApi( $this->baseDir, plugin_dir_url( __DIR__ ), $this->version ) );
 		$this->ajaxController = new AdminAjaxController( $this );
-		$this->client         = new WordPressClient( WordPressClient::SANDBOX );
+		$this->client         = new WordPressClient();
 		$this->updates        = new UpdateController( $this, $this->client );
 		$this->updates->initialize();
 	}

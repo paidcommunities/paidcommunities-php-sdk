@@ -22,8 +22,8 @@ class WordPressClient extends AbstractClient {
 
 	private $http;
 
-	public function __construct( $environment = self::PRODUCTION ) {
-		parent::__construct( $environment );
+	public function __construct( $environment = self::PRODUCTION, $secret = null ) {
+		parent::__construct( $environment, $secret );
 		$this->http = new \WP_Http();
 	}
 

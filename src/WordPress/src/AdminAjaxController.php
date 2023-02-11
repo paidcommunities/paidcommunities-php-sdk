@@ -33,9 +33,8 @@ class AdminAjaxController {
 
 	public function handleLicenseActivate() {
 		// use the license key to activate the domain
-		$license = $this->config->getLicense();
-		$client  = new WordPressClient( WordPressClient::SANDBOX );
-		//$licenseKey = $_POST[ $this->name . '_license_key' ] ?? '';
+		$license    = $this->config->getLicense();
+		$client     = new WordPressClient();
 		$licenseKey = $_POST['license'] ?? '';
 		$domain     = $_SERVER['SERVER_NAME'] ?? '';
 		try {
@@ -45,7 +44,7 @@ class AdminAjaxController {
 			if ( ! $domain ) {
 				$domain = $_SERVER['HTTP_HOST'];
 			}
-			$domain = $client->domains->create( $licenseKey, [
+			$domain = $client->domainRegistration->register( $licenseKey, [
 				'domain' => $domain
 			] );
 			$license->setKey( $licenseKey );
@@ -65,12 +64,12 @@ class AdminAjaxController {
 
 	public function handleLicenseDeactivate() {
 		$license = $this->config->getLicense();
-		$client  = new WordPressClient( WordPressClient::SANDBOX );
+		$client  = new WordPressClient();
 		try {
 			$id = $license->getDomainId();
 			$client->setSecret( $license->getSecret() );
 
-			$response = $client->domains->delete( $id );
+			$client->domains->delete( $id );
 
 			$license->delete();
 

@@ -9,9 +9,10 @@ class RegisterDomain extends TestCase {
 
 	public function testRegisterDomain() {
 		$license = $_ENV['LICENSE'];
-		$client  = new WordPressClient( WordPressClient::SANDBOX );
+		$client  = new WordPressClient();
 		try {
-			$response = $client->domainRegistration->register( $license, [ 'domain' => 'example.com' ] );
+			$response = $client->domainRegistration->register( $license, [ 'domain' => 'test.example.com' ] );
+
 			$this->assertIsString( $response->id, sprintf( 'Domain ID: %s', $response->id ) );
 
 			$client->setSecret( $response->secret );

@@ -12,7 +12,7 @@ class WordpressClientTest extends TestCase {
 	 * @codeCoverageIgnore
 	 */
 	public function testClient() {
-		$client = new WordPressClient( WordPressClient::SANDBOX );
+		$client = new WordPressClient();
 		try {
 			$response = $client->post( '/v1/wordpress/update-check', [] );
 		} catch ( ApiErrorException $e ) {
@@ -24,7 +24,7 @@ class WordpressClientTest extends TestCase {
 	 * @codeCoverageIgnore
 	 */
 	public function testService() {
-		$client = new WordPressClient( WordPressClient::SANDBOX );
+		$client = new WordPressClient();
 		try {
 			$response = $client->updates->check( [
 				'license' => 'lic_Z1m2kTJiMnGBBXMXRZb40jVDLWj1DgfQ',

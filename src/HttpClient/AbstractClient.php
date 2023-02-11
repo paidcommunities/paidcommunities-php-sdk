@@ -3,6 +3,7 @@
 namespace PaidCommunities\HttpClient;
 
 use PaidCommunities\Exception\AuthenticationException;
+use PaidCommunities\Exception\AuthorizationException;
 use PaidCommunities\Exception\BadRequestException;
 use PaidCommunities\Exception\NotFoundException;
 use PaidCommunities\Util\GeneralUtils;
@@ -61,7 +62,7 @@ abstract class AbstractClient implements ClientInterface {
 			case 401:
 				throw AuthenticationException::factory( $code, $body );
 			case 403:
-				break;
+				throw AuthorizationException::factory($code, $body);
 			case 404:
 				throw NotFoundException::factory( $code, $body );
 			case 405:

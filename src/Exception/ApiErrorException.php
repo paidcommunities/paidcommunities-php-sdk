@@ -18,9 +18,11 @@ class ApiErrorException extends \Exception {
 
 			$exception = new static( $error['message'] ?? '', $code );
 			$exception->setParam( $error['param'] ?? '' );
-		} else {
+		} elseif ( isset( $response['error'] ) ) {
 			$exception = new static( $response['error']['message'] ?? '', $code );
 			$exception->setParam( $error['param'] ?? '' );
+		} elseif ( isset( $response['message'] ) ) {
+			$exception = new static( $response['message'], $code );
 		}
 
 		return $exception;

@@ -8,7 +8,7 @@ use PaidCommunities\WordPress\License;
 class WordPressUpdateTest extends \PHPUnit\Framework\TestCase {
 
 	public function testUpdateCheck() {
-		$client = new WordPressClient( WordPressClient::SANDBOX );
+		$client = new WordPressClient();
 
 		$domain = $client->domainRegistration->register( $_ENV['LICENSE'], [ 'domain' => $_ENV['DOMAIN'] ] );
 

@@ -9,7 +9,7 @@ class UpdateControllerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testUpdateController() {
 		$plugin = new PluginConfig( 'premium-test-plugin', '1.0.0' );
-		$client = new WordPressClient( WordPressClient::SANDBOX );
+		$client = new WordPressClient();
 
 		$domain = $client->domainRegistration->register( $_ENV['LICENSE'], [ 'domain' => $_ENV['DOMAIN'] ] );
 
