@@ -47,7 +47,7 @@ class AdminAjaxController {
 			$domain = $client->domainRegistration->register( $licenseKey, [
 				'domain' => $domain
 			] );
-			$license->setKey( $licenseKey );
+
 			$license->setStatus( License::ACTIVE );
 			$license->setSecret( $domain->secret );
 			$license->setDomain( $domain->domain );

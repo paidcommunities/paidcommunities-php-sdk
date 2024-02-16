@@ -6,7 +6,7 @@ use PaidCommunities\Model\Domain;
 
 class DomainRegistrationService extends AbstractService {
 
-	protected $path = '/licenses';
+	protected $path = '/domains';
 
 	/**
 	 * @param $license
@@ -15,6 +15,6 @@ class DomainRegistrationService extends AbstractService {
 	 * @return Domain
 	 */
 	public function register( $license, $request,){
-		return $this->post( $this->buildPath( '/%s/domains', $license ), $request, Domain::class );
+		return $this->post( $this->buildPath( '', $license ), $request, Domain::class );
 	}
 }

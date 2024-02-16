@@ -14,7 +14,7 @@ abstract class AbstractClient implements ClientInterface {
 
 	const PRODUCTION = 'production';
 
-	const SANDBOX_URL = 'http://localhost:8080';
+	const SANDBOX_URL = 'https://api-development.paidcommunities.com';
 
 	const PRODUCTION_URL = 'https://api.paidcommunities.com';
 
