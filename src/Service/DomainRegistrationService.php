@@ -14,7 +14,7 @@ class DomainRegistrationService extends AbstractService {
 	 *
 	 * @return Domain
 	 */
-	public function register( $license, $request,){
-		return $this->post( $this->buildPath( '', $license ), $request, Domain::class );
+	public function register( $request ) {
+		return $this->post( $this->buildPath( '' ), $request, Domain::class );
 	}
 }

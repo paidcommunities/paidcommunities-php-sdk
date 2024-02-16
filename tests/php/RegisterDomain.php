@@ -11,7 +11,11 @@ class RegisterDomain extends TestCase {
 		$license = $_ENV['LICENSE'];
 		$client  = new WordPressClient();
 		try {
-			$response = $client->domainRegistration->register( $license, [ 'domain' => 'test.example.com' ] );
+			$response = $client->domainRegistration->register( [
+				'license' => $license,
+				'domain'  => 'test.example.com',
+				'version' => '1.0.2'
+			] );
 
 			$this->assertIsString( $response->id, sprintf( 'Domain ID: %s', $response->id ) );
 

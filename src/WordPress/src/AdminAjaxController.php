@@ -33,19 +33,21 @@ class AdminAjaxController {
 
 	public function handleLicenseActivate() {
 		// use the license key to activate the domain
-		$license    = $this->config->getLicense();
-		$client     = new WordPressClient();
-		$licenseKey = $_POST['license'] ?? '';
-		$domain     = $_SERVER['SERVER_NAME'] ?? '';
+		$license   = $this->config->getLicense();
+		$client    = new WordPressClient();
+		$licenseId = $_POST['license'] ?? '';
+		$domain    = $_SERVER['SERVER_NAME'] ?? '';
 		try {
-			if ( ! $licenseKey ) {
+			if ( ! $licenseId ) {
 				throw new \Exception( 'Please provide a license key' );
 			}
 			if ( ! $domain ) {
 				$domain = $_SERVER['HTTP_HOST'];
 			}
-			$domain = $client->domainRegistration->register( $licenseKey, [
-				'domain' => $domain
+			$domain = $client->domainRegistration->register( [
+				'license' => $licenseId,
+				'domain'  => $domain,
+				'version' => $this->config->getVersion()
 			] );
 
 			$license->setStatus( License::ACTIVE );
