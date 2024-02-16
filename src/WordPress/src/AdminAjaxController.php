@@ -2,6 +2,7 @@
 
 namespace PaidCommunities\WordPress;
 
+use PaidCommunities\Util\GeneralUtils;
 use PaidCommunities\WordPress\Html\Notice;
 use PaidCommunities\WordPress\HttpClient\WordPressClient;
 
@@ -32,14 +33,15 @@ class AdminAjaxController {
 	}
 
 	public function handleLicenseActivate() {
+		check_admin_referer( "{$this->config->getPluginSlug()}-nonce", 'nonce' );
 		// use the license key to activate the domain
 		$license   = $this->config->getLicense();
-		$client    = new WordPressClient();
+		$client    = new WordPressClient( 'sandbox' );
 		$licenseId = $_POST['license'] ?? '';
 		$domain    = $_SERVER['SERVER_NAME'] ?? '';
 		try {
 			if ( ! $licenseId ) {
-				throw new \Exception( 'Please provide a license key' );
+				throw new \Exception( __( 'Please provide a license key', 'paidcommunities' ) );
 			}
 			if ( ! $domain ) {
 				$domain = $_SERVER['HTTP_HOST'];
@@ -50,10 +52,12 @@ class AdminAjaxController {
 				'version' => $this->config->getVersion()
 			] );
 
+			$license->setLicenseKey( GeneralUtils::redactString( $licenseId, 8 ) );
 			$license->setStatus( License::ACTIVE );
 			$license->setSecret( $domain->secret );
 			$license->setDomain( $domain->domain );
 			$license->setDomainId( $domain->id );
+			$license->setCreatedAt( $domain->createdAt );
 			$license->save();
 			$this->send_ajax_success_response( [
 				'license' => $license->toArray(),
@@ -65,10 +69,15 @@ class AdminAjaxController {
 	}
 
 	public function handleLicenseDeactivate() {
+		check_admin_referer( "{$this->config->getPluginSlug()}-nonce", 'nonce' );
 		$license = $this->config->getLicense();
-		$client  = new WordPressClient();
+		$client  = new WordPressClient( 'sandbox' );
 		try {
 			$id = $license->getDomainId();
+
+			if ( ! $id ) {
+				throw new \Exception( __( 'Domain ID cannot be empty. Are you sure you have a registered domain?', 'paidcommunities' ) );
+			}
 			$client->setSecret( $license->getSecret() );
 
 			$client->domains->delete( $id );

@@ -13,6 +13,7 @@ class ApiErrorException extends \Exception {
 	}
 
 	public static function factory( $code, $response ) {
+		$exception = null;
 		if ( isset( $response['errors'] ) ) {
 			$error = $response['errors'][0];
 
@@ -35,4 +36,5 @@ class ApiErrorException extends \Exception {
 	public function setErrorCode( $code ) {
 		$this->errorCode = $code;
 	}
+
 }

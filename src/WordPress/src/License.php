@@ -8,7 +8,7 @@ class License {
 
 	private $prefix;
 
-	private $key;
+	private $licenseKey;
 
 	private $secret;
 
@@ -19,6 +19,8 @@ class License {
 	private $domainId;
 
 	private $expiration;
+
+	private $createdAt;
 
 	const INACTIVE = 'inactive';
 
@@ -39,20 +41,21 @@ class License {
 
 	public function read() {
 		$data             = \get_option( $this->getOptionName(), [] );
-		$this->key        = $data['key'] ?? '';
+		$this->licenseKey = $data['licenseKey'] ?? '';
 		$this->secret     = $data['secret'] ?? '';
 		$this->status     = $data['status'] ?? self::INACTIVE;
 		$this->domain     = $data['domain'] ?? '';
 		$this->domainId   = $data['domainId'] ?? '';
 		$this->expiration = $data['expiration'] ?? '';
+		$this->createdAt  = $data['createdAt'] ?? '';
 	}
 
 	private function getOptionName() {
 		return $this->prefix . $this->name . '_settings';
 	}
 
-	public function getKey() {
-		return $this->key;
+	public function getLicenseKey() {
+		return $this->licenseKey;
 	}
 
 	public function getSecret() {
@@ -71,8 +74,12 @@ class License {
 		return $this->domainId;
 	}
 
-	public function setKey( $key ) {
-		$this->key = $key;
+	public function getCreatedAt() {
+		return $this->createdAt;
+	}
+
+	public function setLicenseKey( $key ) {
+		$this->licenseKey = $key;
 	}
 
 	public function setSecret( $secret ) {
@@ -91,14 +98,19 @@ class License {
 		$this->domainId = $id;
 	}
 
+	public function setCreatedAt( $value ) {
+		$this->createdAt = $value;
+	}
+
 	public function toArray() {
 		return [
-			'key'        => $this->key,
+			'licenseKey' => $this->licenseKey,
 			'secret'     => $this->secret,
 			'status'     => $this->status,
 			'domain'     => $this->domain,
 			'domainId'   => $this->domainId,
-			'expiration' => $this->expiration
+			'expiration' => $this->expiration,
+			'createdAt'  => $this->createdAt
 		];
 	}
 

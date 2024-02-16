@@ -60,7 +60,7 @@ class LicenseSettings {
                             <div class="pc-grid">
                                 <div class="pc-input-field">
                                     <label>License Key</label>
-                                    <input type="text" id="<?php echo $this->config->getPluginSlug() . '_license' ?>" name="<?php echo $this->config->getPluginSlug() . '_license' ?>" value="<?php echo $license->getMaskedKey() ?>"/>
+                                    <input type="text" id="<?php echo $this->config->getPluginSlug() . '_license' ?>" name="<?php echo $this->config->getPluginSlug() . '_license' ?>" value="<?php echo $license->getLicenseKey() ?>"/>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@ class LicenseSettings {
 	}
 
 	private function addAssetData() {
-		$this->data->add( 'ajaxUrl', admin_url( 'admin-ajax.php' ) );
+		$this->data->add( 'ajaxUrl', add_query_arg( [ 'nonce' => wp_create_nonce( "{$this->config->getPluginSlug()}-nonce" ) ], admin_url( 'admin-ajax.php' ) ) );
 		$this->data->add( 'actions', [ 'activate' => "activate_{$this->config->getPluginSlug() }", 'deactivate' => "deactivate_{$this->config->getPluginSlug() }" ] );
 		$this->data->add( 'pluginName', $this->config->getPluginSlug() );
 		$this->data->add( 'license', $this->config->getLicense()->toArray() );

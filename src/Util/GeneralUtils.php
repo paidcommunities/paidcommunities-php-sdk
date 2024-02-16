@@ -20,4 +20,11 @@ class GeneralUtils {
 
 		return false;
 	}
+
+	public static function redactString( $string, $last = 4 ) {
+		$length = strlen( $string ) - $last;
+
+		return implode( '', array_fill( 0, $length, '*' ) ) . substr( $string, $length );
+	}
+
 }
