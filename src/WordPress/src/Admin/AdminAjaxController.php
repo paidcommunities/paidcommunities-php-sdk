@@ -1,10 +1,12 @@
 <?php
 
-namespace PaidCommunities\WordPress;
+namespace PaidCommunities\WordPress\Admin;
 
 use PaidCommunities\Util\GeneralUtils;
 use PaidCommunities\WordPress\Html\Notice;
 use PaidCommunities\WordPress\HttpClient\WordPressClient;
+use PaidCommunities\WordPress\License;
+use PaidCommunities\WordPress\PluginConfig;
 
 class AdminAjaxController {
 
@@ -59,9 +61,15 @@ class AdminAjaxController {
 			$license->setDomainId( $domain->id );
 			$license->setCreatedAt( $domain->createdAt );
 			$license->save();
+
+			ob_start();
+			$this->config->getSettings()->render();
+			$html = ob_get_clean();
+
 			$this->send_ajax_success_response( [
 				'license' => $license->toArray(),
-				'message' => Notice::renderSuccess( 'Your site has been activated.' )
+				'message' => Notice::renderSuccess( 'Your site has been activated.' ),
+				'html'    => $html
 			] );
 		} catch ( \Exception $e ) {
 			$this->send_ajax_error_response( $e );
@@ -84,7 +92,14 @@ class AdminAjaxController {
 
 			$license->delete();
 
-			$this->send_ajax_success_response( [ 'message' => Notice::renderSuccess( 'Your site has been deactivated.' ) ] );
+			ob_start();
+			$this->config->getSettings()->render();
+			$html = ob_get_clean();
+
+			$this->send_ajax_success_response( [
+				'message' => Notice::renderSuccess( 'Your site has been deactivated.' ),
+				'html'    => $html
+			] );
 		} catch ( \Exception $e ) {
 			$this->send_ajax_error_response( $e );
 		}

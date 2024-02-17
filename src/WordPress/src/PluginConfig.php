@@ -25,7 +25,7 @@ class PluginConfig {
 	private $baseDir;
 
 	/**
-	 * @param string $slug The name of the plugin
+	 * @param string $slug    The name of the plugin
 	 * @param string $version The current version of the plugin
 	 */
 	public function __construct( $slug, $version ) {
@@ -37,7 +37,7 @@ class PluginConfig {
 
 	private function initialize() {
 		$this->settings       = new LicenseSettings( $this, new AssetsApi( $this->baseDir, plugin_dir_url( __DIR__ ), $this->version ) );
-		$this->ajaxController = new AdminAjaxController( $this );
+		$this->ajaxController = new \PaidCommunities\WordPress\Admin\AdminAjaxController( $this );
 		$this->client         = new WordPressClient();
 		$this->updates        = new UpdateController( $this, $this->client );
 		$this->updates->initialize();
@@ -53,6 +53,10 @@ class PluginConfig {
 
 	public function getOptionName() {
 		return $this->getOptionPrefix() . $this->slug . '_settings';
+	}
+
+	public function getSettings() {
+		return $this->settings;
 	}
 
 	/**

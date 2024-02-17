@@ -22,6 +22,8 @@ class License {
 
 	private $createdAt;
 
+	private $lastCheck;
+
 	const INACTIVE = 'inactive';
 
 	const ACTIVE = 'active';
@@ -37,6 +39,14 @@ class License {
 
 	public function delete() {
 		\delete_option( $this->getOptionName() );
+		$this->setLicenseKey( '' );
+		$this->setSecret( '' );
+		$this->setStatus( '' );
+		$this->setDomain( '' );
+		$this->setDomainId( '' );
+		$this->setExpiration( '' );
+		$this->setCreatedAt( '' );
+		$this->setLastCheck( '' );
 	}
 
 	public function read() {
@@ -78,6 +88,10 @@ class License {
 		return $this->createdAt;
 	}
 
+	public function getLastCheck() {
+		return $this->lastCheck;
+	}
+
 	public function setLicenseKey( $key ) {
 		$this->licenseKey = $key;
 	}
@@ -102,6 +116,10 @@ class License {
 		$this->createdAt = $value;
 	}
 
+	public function setLastCheck( $value ) {
+		$this->lastCheck = $value;
+	}
+
 	public function toArray() {
 		return [
 			'licenseKey' => $this->licenseKey,
@@ -110,23 +128,13 @@ class License {
 			'domain'     => $this->domain,
 			'domainId'   => $this->domainId,
 			'expiration' => $this->expiration,
-			'createdAt'  => $this->createdAt
+			'createdAt'  => $this->createdAt,
+			'lastCheck'  => $this->lastCheck
 		];
 	}
 
 	public function isActive() {
 		return $this->status === self::ACTIVE;
-	}
-
-	public function getMaskedKey() {
-		if ( $this->key ) {
-			$length = strlen( $this->key ) - 4;
-			$key    = implode( '', array_fill( 0, $length, 'x' ) ) . substr( $this->key, $length );
-
-			return $key;
-		}
-
-		return $this->key;
 	}
 
 }

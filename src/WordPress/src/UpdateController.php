@@ -51,6 +51,8 @@ class UpdateController {
 						'package'     => $response->package,
 						'slug'        => $this->config->getPluginSlug()
 					];
+					$license->setLastCheck( $response->lastCheck );
+					$license->save();
 				}
 			}
 		} catch ( ApiErrorException $e ) {

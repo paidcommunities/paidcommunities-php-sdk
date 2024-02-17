@@ -41,7 +41,6 @@ class LicenseSettings {
 
 	public function render() {
 		$license    = $this->config->getLicense();
-		$buttonText = $license->isActive() ? 'Deactivate Site' : 'Activate Site';
 		wp_enqueue_script( 'paidcommunities-license' );
 		wp_enqueue_style( 'paidcommunities-styles' );
 		$this->data->print_data( 'paidCommunitiesLicenseParams' );
@@ -49,31 +48,11 @@ class LicenseSettings {
 			$callback = $this->callback;
 			call_user_func( $callback, $this );
 		} else {
-			?>
-            <div class="pc-license-settings">
-                <div class="pc-license-settings__header">
-                    <h2><?php esc_html_e( $this->options->getSettingsTitle() ) ?></h2>
-                </div>
-                <div class="pc-grid-sm-6">
-                    <div class="pc-paper">
-                        <div class="pc-row">
-                            <div class="pc-grid">
-                                <div class="pc-input-field">
-                                    <label>License Key</label>
-                                    <input type="text" id="<?php echo $this->config->getPluginSlug() . '_license' ?>" name="<?php echo $this->config->getPluginSlug() . '_license' ?>" value="<?php echo $license->getLicenseKey() ?>"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pc-row">
-                            <div class="pc-grid">
-                                <button class="btn button-secondary paidcommunities-license-btn"><?php echo $buttonText ?></button>
-                            </div>
-                        </div>
-                        <div class="pc-notices"></div>
-                    </div>
-                </div>
-            </div>
-			<?php
+			if ( $license->getDomainId() ) {
+				include_once __DIR__ . '/Views/license.php';
+			} else {
+				include_once __DIR__ . '/Views/new-license.php';
+			}
 		}
 	}
 

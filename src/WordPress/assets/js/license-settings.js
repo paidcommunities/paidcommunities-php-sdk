@@ -47,7 +47,7 @@ const handleButtonClick = async e => {
     let license = getValue('license');
     try {
         $button.prop('disabled', true);
-        if (license.status !== 'active') {
+        if ($button.hasClass('activate')) {
             $button.text(getValue('i18n').activateMsg);
             response = await activate();
         } else {
@@ -55,18 +55,19 @@ const handleButtonClick = async e => {
             response = await deactivate();
         }
         if (!response.success) {
-            return addErrorMessage(response?.error?.message);
+            return addNotice(response?.error?.message);
         }
-        return addErrorMessage(response.data.message);
+        $('.pc-license-settings').replaceWith(response.data.html);
+        return addNotice(response.data.message);
     } catch (error) {
-        return addErrorMessage(error.message);
+        return addNotice(error.message);
     } finally {
         $button.prop('disabled', false);
         $button.text(text);
     }
 }
 
-const addErrorMessage = message => {
+const addNotice = message => {
     const $message = $(message);
     $message.on('click', '.pc-close-notice', () => {
         $message.remove();
