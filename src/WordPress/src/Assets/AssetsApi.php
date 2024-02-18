@@ -20,9 +20,10 @@ class AssetsApi {
 	}
 
 	public function register_script( $handle, $relative_path, $deps = [], $version = null, $footer = true ) {
-		$file_name = str_replace( '.js', '.asset.php', $relative_path );
-		$file      = $this->basePath . $file_name;
-		$version   = null;
+		$relative_path = '/' . ltrim( $relative_path, '\/' );
+		$file_name     = str_replace( '.js', '.asset.php', $relative_path );
+		$file          = $this->basePath . $file_name;
+		$version       = null;
 		if ( file_exists( $file ) ) {
 			$assets  = include $file;
 			$version = $assets['version'] ?? $version;

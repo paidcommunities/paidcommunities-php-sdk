@@ -51,5 +51,8 @@
     "url-loader": "^4.1.1",
     "webpack-cli": "^4.5.0",
     "webpack-rtl-plugin": "^2.0.0"
+  },
+  "dependencies": {
+    "sweetalert": "^2.1.2"
   }
 }

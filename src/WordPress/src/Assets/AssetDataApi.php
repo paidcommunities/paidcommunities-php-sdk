@@ -33,4 +33,14 @@ class AssetDataApi {
 		</script>";
 	}
 
+	public function add_inline_script( $name, $handle ) {
+		wp_add_inline_script(
+			$handle,
+			"var $name = $name || JSON.parse( decodeURIComponent( '"
+			. esc_js( rawurlencode( wp_json_encode( $this->data ) ) )
+			. "' ) );",
+			'before'
+		);
+	}
+
 }

@@ -6,6 +6,10 @@ const WebpackRTLPlugin = require('webpack-rtl-plugin');
 const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 const {kebabCase} = require('lodash');
 const fs = require("fs");
+const {
+    requestToHandle,
+    requestToExternal
+} = require('./bin/webpack-helpers');
 
 const env = process.env.NODE_ENV || 'development';
 const isDev = env === 'development';
@@ -29,7 +33,7 @@ const javascript = {
         filename: (chunkData) => {
             return `${kebabCase(chunkData.chunk.name)}.js`
         },
-        library: ['paidCommunities', '[name]'],
+        library: ['paidcommunities', '[name]'],
         libraryTarget: 'this'
     },
     module: {
@@ -77,11 +81,11 @@ const javascript = {
     plugins: [
         new DependencyExtractionWebpackPlugin({
             injectPolyfill: true,
-            //requestToExternal: requestToExternal,
-            //requestToHandle: requestToHandle
+            requestToExternal: requestToExternal,
+            requestToHandle: requestToHandle
         }),
     ],
-    optimization: {
+    /*optimization: {
         splitChunks: {
             cacheGroups: {
                 commons: {
@@ -90,7 +94,71 @@ const javascript = {
                 }
             },
         }
-    }
+    }*/
+}
+
+const paidcommunities = {
+    ...defaults,
+    entry: {
+        paidcommunitiesApi: path.resolve(__dirname, 'assets/js/paidcommunities-api')
+    },
+    output: {
+        path: path.resolve(__dirname, 'build'),
+        filename: (chunkData) => {
+            return `${kebabCase(chunkData.chunk.name)}.js`
+        },
+        library: {
+            name: ['paidcommunities', 'wp', 'api'],
+            type: 'this'
+        }
+    },
+    module: {
+        rules: [
+            {
+                test: /\.m?jsx?$/,
+                resolve: {
+                    fullySpecified: false
+                },
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+                        presets: [
+                            [
+                                '@babel/preset-env',
+                                {
+                                    modules: false,
+                                    targets: {
+                                        browsers: [
+                                            'extends @wordpress/browserslist-config'
+                                        ]
+                                    }
+                                }
+                            ]
+                        ],
+                        plugins: [
+                            require.resolve('@babel/plugin-proposal-object-rest-spread'),
+                            require.resolve('@babel/plugin-proposal-async-generator-functions'),
+                            require.resolve('@babel/plugin-transform-runtime'),
+                            require.resolve('@babel/plugin-proposal-class-properties'),
+                        ]
+                    }
+                }
+            },
+            {
+                test: /\.s?css$/,
+                use: {
+                    loader: 'ignore-loader',
+                }
+            }
+        ]
+    },
+    plugins: [
+        new DependencyExtractionWebpackPlugin({
+            injectPolyfill: true,
+        }),
+    ],
 }
 
 const styling = {
@@ -150,5 +218,5 @@ const styling = {
 
 }
 
-module.exports = [javascript, styling];
+module.exports = [javascript, paidcommunities, styling];
 

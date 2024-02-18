@@ -1,23 +1,21 @@
-<div class="pc-license-settings">
-    <div class="pc-license-settings__header">
-        <h2><?php esc_html_e( $this->options->getSettingsTitle() ) ?></h2>
-    </div>
-    <div class="pc-grid-sm-6">
-        <div class="pc-paper">
-            <div class="pc-row">
-                <div class="pc-grid">
-                    <div class="pc-input-field">
-                        <label><?php esc_html_e( 'License Key', 'paidcommunities' ) ?></label>
-                        <span><?php echo $license->getLicenseKey() ?></span>
-                    </div>
+<form class="PaidCommunitiesLicense-settings">
+    <div class="PaidCommunitiesGrid-root">
+        <div class="PaidCommunitiesGrid-item">
+            <div class="PaidCommunitiesStack-root">
+                <label class="PaidCommunitiesLabel-root"><?php esc_html_e( 'License Key', 'paidcommunities' ) ?></label>
+                <div <?php if ( $license->isRegistered() ){ ?>class="LicenseRegistered"<?php } ?>>
+					<?php if ( $license->isRegistered() ): ?>
+                        <input name="license_key" class="PaidComunitiesInput-text LicenseKey" type="text" disabled value="<?php echo esc_attr( $license->getLicenseKey() ) ?>"/>
+					<?php else: ?>
+                        <input name="license_key" class="PaidComunitiesInput-text LicenseKey"/>
+					<?php endif ?>
                 </div>
+				<?php if ( $license->isRegistered() ): ?>
+                    <button class="button PaidCommunitiesButton-root DeactivateLicense"><?php esc_html_e( 'Deacticate License', 'paidcommunities' ) ?></button>
+				<?php else: ?>
+                    <button class="button PaidCommunitiesButton-root ActivateLicense"><?php esc_html_e( 'Activate License', 'paidcommunities' ) ?></button>
+				<?php endif ?>
             </div>
-            <div class="pc-row">
-                <div class="pc-grid">
-                    <button class="btn button-secondary paidcommunities-license-btn deactivate"><?php esc_html_e( 'Deactivate Site', 'paidcommunities' ); ?></button>
-                </div>
-            </div>
-            <div class="pc-notices"></div>
         </div>
     </div>
-</div>
+</form>
