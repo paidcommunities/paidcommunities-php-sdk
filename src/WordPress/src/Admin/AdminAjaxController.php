@@ -66,7 +66,7 @@ class AdminAjaxController {
 			$license->save();
 
 			ob_start();
-			$this->config->getSettings()->render();
+			$this->config->getLicenseSettings()->render();
 			$html = ob_get_clean();
 
 			$this->send_ajax_success_response( [
@@ -104,7 +104,7 @@ class AdminAjaxController {
 			$license->delete();
 
 			ob_start();
-			$this->config->getSettings()->render();
+			$this->config->getLicenseSettings()->render();
 			$html = ob_get_clean();
 
 			$this->send_ajax_success_response( [

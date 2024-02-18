@@ -61,7 +61,7 @@ class PluginConfig {
 		return $this->getOptionPrefix() . $this->slug . '_settings';
 	}
 
-	public function getSettings() {
+	public function getLicenseSettings() {
 		return $this->settings;
 	}
 
@@ -70,16 +70,6 @@ class PluginConfig {
 	 */
 	public function getUpdateController() {
 		return $this->updates;
-	}
-
-	public function updateSettings( $data ) {
-		\update_option( $this->getOptionName(), $data, true );
-	}
-
-	public function addSubmenu( $parent_slug, $title, $menu_title, $capability, $callback = '', $position = null ) {
-		$callback = $callback ?: [ $this->settings, 'render' ];
-		$slug     = "{$this->slug}_license";
-		add_submenu_page( $parent_slug, $title, $menu_title, $capability, $slug, $callback, $position );
 	}
 
 	public function getPluginSlug() {
