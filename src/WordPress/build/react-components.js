@@ -42,12 +42,15 @@ function LicenseComponent() {
     _useState2 = _slicedToArray(_useState, 2),
     licenseKey = _useState2[0],
     setLicenseKey = _useState2[1];
-  var _useState3 = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState3 = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(paidcommunitiesLicenseParams.license),
     _useState4 = _slicedToArray(_useState3, 2),
-    processing = _useState4[0],
-    setProcessing = _useState4[1];
+    license = _useState4[0],
+    setLicense = _useState4[1];
+  var _useState5 = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState6 = _slicedToArray(_useState5, 2),
+    processing = _useState6[0],
+    setProcessing = _useState6[1];
   var _paidcommunitiesLicen = paidcommunitiesLicenseParams,
-    license = _paidcommunitiesLicen.license,
     i18n = _paidcommunitiesLicen.i18n,
     nonce = _paidcommunitiesLicen.nonce,
     slug = _paidcommunitiesLicen.slug;
@@ -73,6 +76,7 @@ function LicenseComponent() {
             addNotice(response.error, 'error');
           } else {
             addNotice(response.data.notice, 'success');
+            setLicense(response.data.license);
           }
           _context.next = 12;
           break;
@@ -107,6 +111,8 @@ function LicenseComponent() {
             addNotice(response.error, 'error');
           } else {
             addNotice(response.data.notice, 'success');
+            setLicense(response.data.license);
+            setLicenseKey('');
           }
           _context2.next = 11;
           break;
@@ -149,13 +155,13 @@ function LicenseComponent() {
     onChange: onChange
   })), license.registered && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: 'primary',
-    text: i18n.deactivateLicense,
+    text: processing ? i18n.deactivateMsg : i18n.deactivateLicense,
     isBusy: processing,
     disabled: processing,
     onClick: onDeactivate
   }), !license.registered && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: 'primary',
-    text: i18n.activateLicense,
+    text: processing ? i18n.activateMsg : i18n.activateLicense,
     isBusy: processing,
     disabled: processing,
     onClick: onActivate

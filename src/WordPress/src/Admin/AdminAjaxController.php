@@ -76,7 +76,13 @@ class AdminAjaxController {
 					'code'    => 'activation_success',
 					'message' => __( 'Your site has been activated.', 'paidcommunities' )
 				],
-				'html'    => $html
+				'html'    => $html,
+				'license' => [
+					'domain'      => $license->getDomain(),
+					'domain_id'   => $license->getDomainId(),
+					'registered'  => $license->isRegistered(),
+					'license_key' => $license->getLicenseKey()
+				]
 			] );
 		} catch ( \Exception $e ) {
 			$this->send_ajax_error_response( $e );
@@ -109,11 +115,17 @@ class AdminAjaxController {
 			$html = ob_get_clean();
 
 			$this->send_ajax_success_response( [
-				'notice' => [
+				'notice'  => [
 					'code'    => 'deactivation_success',
 					'message' => esc_html__( 'Your site has been deactivated.', 'paidcommunities' ),
 				],
-				'html'   => $html
+				'html'    => $html,
+				'license' => [
+					'domain'      => $license->getDomain(),
+					'domain_id'   => $license->getDomainId(),
+					'registered'  => $license->isRegistered(),
+					'license_key' => $license->getLicenseKey()
+				]
 			] );
 		} catch ( \Exception $e ) {
 			$this->send_ajax_error_response( $e );

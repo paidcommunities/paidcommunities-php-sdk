@@ -6,8 +6,9 @@ import classnames from 'classnames';
 
 export default function LicenseComponent() {
     const [licenseKey, setLicenseKey] = useState('');
+    const [license, setLicense] = useState(paidcommunitiesLicenseParams.license)
     const [processing, setProcessing] = useState(false);
-    const {license, i18n, nonce, slug} = paidcommunitiesLicenseParams;
+    const {i18n, nonce, slug} = paidcommunitiesLicenseParams;
 
     const onChange = event => setLicenseKey(event.target.value);
 
@@ -23,6 +24,7 @@ export default function LicenseComponent() {
                 addNotice(response.error, 'error');
             } else {
                 addNotice(response.data.notice, 'success');
+                setLicense(response.data.license);
             }
         } catch (error) {
             addNotice(error, 'error');
@@ -39,6 +41,8 @@ export default function LicenseComponent() {
                 addNotice(response.error, 'error');
             } else {
                 addNotice(response.data.notice, 'success');
+                setLicense(response.data.license);
+                setLicenseKey('');
             }
         } catch (error) {
             addNotice(error, 'error');
@@ -73,7 +77,7 @@ export default function LicenseComponent() {
                         {license.registered &&
                             <Button
                                 variant={'primary'}
-                                text={i18n.deactivateLicense}
+                                text={processing ? i18n.deactivateMsg : i18n.deactivateLicense}
                                 isBusy={processing}
                                 disabled={processing}
                                 onClick={onDeactivate}>
@@ -82,7 +86,7 @@ export default function LicenseComponent() {
                         {!license.registered &&
                             <Button
                                 variant={'primary'}
-                                text={i18n.activateLicense}
+                                text={processing ? i18n.activateMsg : i18n.activateLicense}
                                 isBusy={processing}
                                 disabled={processing}
                                 onClick={onActivate}/>
