@@ -26,6 +26,7 @@ class AdminScripts {
 	public function register_scripts() {
 		$this->assets->register_script( 'paidcommunities-license', 'build/license-settings.js' );
 		$this->assets->register_script( 'paidcommunities-wordpress-api', 'build/paidcommunities-api.js' );
+		$this->assets->register_script( 'paidcommunities-wp-components', 'build/react-components.js' );
 		$this->assets->register_style( 'paidcommunities-styles', 'build/styles.css' );
 
 		$this->add_data();
@@ -36,10 +37,18 @@ class AdminScripts {
 		$this->data->add( 'slug', $this->config->getPluginSlug() );
 		$this->data->add( 'nonce', WordPressUtils::createNonce( $this->config->getPluginSlug() ) );
 		$this->data->add( 'pluginName', $this->config->getPluginSlug() );
-		$this->data->add( 'license', $this->config->getLicense()->toArray() );
+		$this->data->add( 'license', [
+			'domain'      => $this->config->getLicense()->getDomain(),
+			'domain_id'   => $this->config->getLicense()->getDomainId(),
+			'registered'  => $this->config->getLicense()->isRegistered(),
+			'license_key' => $this->config->getLicense()->getLicenseKey()
+		] );
 		$this->data->add( 'i18n', [
-			'activateMsg'          => 'Activating...',
-			'deactivateMsg'        => 'Deactivating...',
+			'activateLicense'      => __( 'Activate License', 'paidcommunities' ),
+			'deactivateLicense'    => __( 'Deactivate License', 'paidcommunities' ),
+			'licenseKey'           => __( 'License Key', 'paidcommunities' ),
+			'activateMsg'          => __( 'Activating...', 'paidcommunities' ),
+			'deactivateMsg'        => __( 'Deactivating...', 'paidcommunities' ),
 			'activation_error'     => __( 'Activation Error!', 'paidcommunities' ),
 			'activation_success'   => __( 'Activation Success!', 'paidcommunities' ),
 			'deactivation_success' => __( 'De-activation Success!', 'paidcommunities' ),

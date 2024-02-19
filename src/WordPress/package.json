@@ -53,6 +53,7 @@
     "webpack-rtl-plugin": "^2.0.0"
   },
   "dependencies": {
+    "@wordpress/components": "^26.0.1",
     "sweetalert": "^2.1.2"
   }
 }

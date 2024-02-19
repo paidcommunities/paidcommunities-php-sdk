@@ -161,6 +161,58 @@ const paidcommunities = {
     ],
 }
 
+const reactJs = {
+    ...defaults,
+    entry: {
+        reactComponents: path.resolve(__dirname, 'assets/js/react')
+    },
+    output: {
+        path: path.resolve(__dirname, 'build'),
+        filename: (chunkData) => {
+            return `${kebabCase(chunkData.chunk.name)}.js`
+        },
+        library: ['paidcommunities', 'wp', 'react'],
+        libraryTarget: 'this'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.m?js$/,
+                resolve: {
+                    fullySpecified: false
+                }
+            },
+            {
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+                        presets: [
+                            [
+                                '@babel/preset-env',
+                                {
+                                    modules: false,
+                                    targets: '> 0.25%, not dead'
+                                }
+                            ],
+                            '@babel/preset-react'
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    plugins: [
+        new DependencyExtractionWebpackPlugin({
+            injectPolyfill: true,
+            requestToExternal,
+            requestToHandle
+        }),
+    ],
+}
+
 const styling = {
     ...defaults,
     entry: {
@@ -218,5 +270,5 @@ const styling = {
 
 }
 
-module.exports = [javascript, paidcommunities, styling];
+module.exports = [javascript, paidcommunities, reactJs, styling];
 
