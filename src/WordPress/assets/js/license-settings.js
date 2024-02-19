@@ -16,10 +16,13 @@ const handleButtonClick = async e => {
         $button.prop('disabled', true).addClass('updating-message');
         if ($button.hasClass('ActivateLicense')) {
             $button.text(getValue('i18n').activateMsg);
-            const data = $('form.PaidCommunitiesLicense-settings').serializeArray();
-            data.push({name: 'nonce', value: getValue('nonce')});
 
-            response = await activate(slug, $.param(data));
+            const data = {
+                nonce: getValue('nonce'),
+                license_key: $(`#${slug}-license_key`).val()
+            }
+
+            response = await activate(slug, data);
 
         } else {
             $button.text(getValue('i18n').deactivateMsg);

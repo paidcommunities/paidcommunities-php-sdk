@@ -195,53 +195,52 @@ var handleButtonClick = /*#__PURE__*/function () {
           _context.prev = 4;
           $button.prop('disabled', true).addClass('updating-message');
           if (!$button.hasClass('ActivateLicense')) {
-            _context.next = 15;
+            _context.next = 14;
             break;
           }
           $button.text(getValue('i18n').activateMsg);
-          data = jquery__WEBPACK_IMPORTED_MODULE_2___default()('form.PaidCommunitiesLicense-settings').serializeArray();
-          data.push({
-            name: 'nonce',
-            value: getValue('nonce')
-          });
-          _context.next = 12;
-          return (0,_paidcommunities_wordpress_api__WEBPACK_IMPORTED_MODULE_4__.activate)(slug, jquery__WEBPACK_IMPORTED_MODULE_2___default().param(data));
-        case 12:
+          data = {
+            nonce: getValue('nonce'),
+            license_key: jquery__WEBPACK_IMPORTED_MODULE_2___default()("#".concat(slug, "-license_key")).val()
+          };
+          _context.next = 11;
+          return (0,_paidcommunities_wordpress_api__WEBPACK_IMPORTED_MODULE_4__.activate)(slug, data);
+        case 11:
           response = _context.sent;
-          _context.next = 20;
+          _context.next = 19;
           break;
-        case 15:
+        case 14:
           $button.text(getValue('i18n').deactivateMsg);
           nonce = getValue('nonce');
-          _context.next = 19;
+          _context.next = 18;
           return (0,_paidcommunities_wordpress_api__WEBPACK_IMPORTED_MODULE_4__.deactivate)(slug, {
             nonce: nonce
           });
-        case 19:
+        case 18:
           response = _context.sent;
-        case 20:
+        case 19:
           if (!response.success) {
             addNotice(response.error, 'error');
           } else {
             addNotice(response.data.notice, 'success');
             jquery__WEBPACK_IMPORTED_MODULE_2___default()('.PaidCommunitiesLicense-settings').replaceWith(response.data.html);
           }
-          _context.next = 26;
+          _context.next = 25;
           break;
-        case 23:
-          _context.prev = 23;
+        case 22:
+          _context.prev = 22;
           _context.t0 = _context["catch"](4);
           return _context.abrupt("return", addNotice(_context.t0));
-        case 26:
-          _context.prev = 26;
+        case 25:
+          _context.prev = 25;
           $button.prop('disabled', false);
           $button.text(text).removeClass('updating-message');
-          return _context.finish(26);
-        case 30:
+          return _context.finish(25);
+        case 29:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[4, 23, 26, 30]]);
+    }, _callee, null, [[4, 22, 25, 29]]);
   }));
   return function handleButtonClick(_x) {
     return _ref.apply(this, arguments);

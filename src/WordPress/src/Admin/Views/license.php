@@ -1,13 +1,13 @@
-<form class="PaidCommunitiesLicense-settings">
+<div class="PaidCommunitiesLicense-settings">
     <div class="PaidCommunitiesGrid-root">
         <div class="PaidCommunitiesGrid-item">
-            <div class="PaidCommunitiesStack-root">
+            <div class="PaidCommunitiesStack-root LicenseKeyOptionGroup">
                 <label class="PaidCommunitiesLabel-root"><?php esc_html_e( 'License Key', 'paidcommunities' ) ?></label>
-                <div <?php if ( $license->isRegistered() ){ ?>class="LicenseRegistered"<?php } ?>>
+                <div class="PaidCommunitiesInputBase-root <?php if ( $license->isRegistered() ) { ?> LicenseRegistered<?php } ?>">
 					<?php if ( $license->isRegistered() ): ?>
-                        <input name="license_key" class="PaidComunitiesInput-text LicenseKey" type="text" disabled value="<?php echo esc_attr( $license->getLicenseKey() ) ?>"/>
+                        <input id="<?php echo esc_attr( $slug ) ?>-license_key" class="PaidComunitiesInput-text LicenseKey" type="text" disabled value="<?php echo esc_attr( $license->getLicenseKey() ) ?>"/>
 					<?php else: ?>
-                        <input name="license_key" class="PaidComunitiesInput-text LicenseKey"/>
+                        <input id="<?php echo esc_attr( $slug ) ?>-license_key" class="PaidComunitiesInput-text LicenseKey"/>
 					<?php endif ?>
                 </div>
 				<?php if ( $license->isRegistered() ): ?>
@@ -18,4 +18,4 @@
             </div>
         </div>
     </div>
-</form>
+</div>

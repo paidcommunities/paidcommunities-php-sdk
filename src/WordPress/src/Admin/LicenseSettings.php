@@ -27,6 +27,7 @@ class LicenseSettings {
 
 	public function render() {
 		$license = $this->config->getLicense();
+		$slug    = $this->config->getPluginSlug();
 
 		wp_enqueue_script( 'paidcommunities-license' );
 		wp_enqueue_style( 'paidcommunities-styles' );

@@ -61,6 +61,9 @@ class PluginConfig {
 		return $this->getOptionPrefix() . $this->slug . '_settings';
 	}
 
+	/**
+	 * @return LicenseSettings
+	 */
 	public function getLicenseSettings() {
 		return $this->settings;
 	}
