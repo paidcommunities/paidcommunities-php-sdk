@@ -1,78 +1,52 @@
 import $ from 'jquery';
+import swal from 'sweetalert';
+import {activate, deactivate} from '@paidcommunities/wordpress-api';
 
-const getValue = key => paidCommunitiesLicenseParams[key] || null;
+const getValue = key => paidcommunitiesLicenseParams[key] || null;
 
-const activate = () => {
-    const key = getValue('pluginName');
-    const id = `#${key}_license`;
-    const license = $(id).val();
-    return new Promise((resolve) => {
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: getValue('ajaxUrl'),
-            data: {
-                action: getValue('actions').activate,
-                license
-            }
-        }).done(response => {
-            return resolve(response);
-        }).fail((jqXHR) => {
-            return resolve(response);
-        })
-    });
-}
-
-const deactivate = () => {
-    return new Promise((resolve) => {
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: getValue('ajaxUrl'),
-            data: {
-                action: getValue('actions').deactivate
-            }
-        }).done(response => {
-            return resolve(response);
-        }).fail((jqXHR) => {
-            return resolve(response);
-        })
-    })
-}
+const slug = getValue('slug');
 
 const handleButtonClick = async e => {
+    e.preventDefault();
     let response;
     let $button = $(e.currentTarget);
     let text = $button.text();
     let license = getValue('license');
     try {
-        $button.prop('disabled', true);
-        if ($button.hasClass('activate')) {
+        $button.prop('disabled', true).addClass('updating-message');
+        if ($button.hasClass('ActivateLicense')) {
             $button.text(getValue('i18n').activateMsg);
-            response = await activate();
+
+            const data = {
+                nonce: getValue('nonce'),
+                license_key: $(`#${slug}-license_key`).val()
+            }
+
+            response = await activate(slug, data);
+
         } else {
             $button.text(getValue('i18n').deactivateMsg);
-            response = await deactivate();
+            const nonce = getValue('nonce');
+
+            response = await deactivate(slug, {nonce});
         }
         if (!response.success) {
-            return addNotice(response?.error?.message);
+            addNotice(response.error, 'error');
+        } else {
+            addNotice(response.data.notice, 'success');
+            $('.PaidCommunitiesLicense-settings').replaceWith(response.data.html);
         }
-        $('.pc-license-settings').replaceWith(response.data.html);
-        return addNotice(response.data.message);
     } catch (error) {
-        return addNotice(error.message);
+        return addNotice(error);
     } finally {
         $button.prop('disabled', false);
-        $button.text(text);
+        $button.text(text).removeClass('updating-message');
     }
 }
 
-const addNotice = message => {
-    const $message = $(message);
-    $message.on('click', '.pc-close-notice', () => {
-        $message.remove();
-    });
-    $('.pc-notices').append($message);
+const addNotice = (notice, type) => {
+    swal(paidcommunitiesLicenseParams.i18n[notice.code], notice.message, type);
 }
 
-$(document.body).on('click', '.paidcommunities-license-btn', handleButtonClick);
+$(document.body).on('click', '.ActivateLicense', handleButtonClick);
+$(document.body).on('click', '.DeactivateLicense', handleButtonClick);

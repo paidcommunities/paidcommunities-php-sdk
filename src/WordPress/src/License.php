@@ -18,8 +18,6 @@ class License {
 
 	private $domainId;
 
-	private $expiration;
-
 	private $createdAt;
 
 	private $lastCheck;
@@ -44,7 +42,6 @@ class License {
 		$this->setStatus( '' );
 		$this->setDomain( '' );
 		$this->setDomainId( '' );
-		$this->setExpiration( '' );
 		$this->setCreatedAt( '' );
 		$this->setLastCheck( '' );
 	}
@@ -56,7 +53,6 @@ class License {
 		$this->status     = $data['status'] ?? self::INACTIVE;
 		$this->domain     = $data['domain'] ?? '';
 		$this->domainId   = $data['domainId'] ?? '';
-		$this->expiration = $data['expiration'] ?? '';
 		$this->createdAt  = $data['createdAt'] ?? '';
 	}
 
@@ -127,7 +123,6 @@ class License {
 			'status'     => $this->status,
 			'domain'     => $this->domain,
 			'domainId'   => $this->domainId,
-			'expiration' => $this->expiration,
 			'createdAt'  => $this->createdAt,
 			'lastCheck'  => $this->lastCheck
 		];
@@ -135,6 +130,10 @@ class License {
 
 	public function isActive() {
 		return $this->status === self::ACTIVE;
+	}
+
+	public function isRegistered() {
+		return strlen( $this->getDomainId() ) > 0;
 	}
 
 }

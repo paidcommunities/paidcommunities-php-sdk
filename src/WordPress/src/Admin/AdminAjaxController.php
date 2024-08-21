@@ -35,26 +35,30 @@ class AdminAjaxController {
 	}
 
 	public function handleLicenseActivate() {
-		check_admin_referer( "{$this->config->getPluginSlug()}-nonce", 'nonce' );
 		// use the license key to activate the domain
 		$license   = $this->config->getLicense();
 		$client    = new WordPressClient( 'sandbox' );
-		$licenseId = $_POST['license'] ?? '';
+		$licenseKy = $_POST['license_key'] ?? '';
 		$domain    = $_SERVER['SERVER_NAME'] ?? '';
 		try {
-			if ( ! $licenseId ) {
+			$this->verify_admin_nonce();
+
+			if ( ! current_user_can( 'administrator' ) ) {
+				throw new \Exception( __( 'Administrator access is required to perform this action.', 'paidcommunities' ), 403 );
+			}
+			if ( ! $licenseKy ) {
 				throw new \Exception( __( 'Please provide a license key', 'paidcommunities' ) );
 			}
 			if ( ! $domain ) {
 				$domain = $_SERVER['HTTP_HOST'];
 			}
 			$domain = $client->domainRegistration->register( [
-				'license' => $licenseId,
+				'license' => $licenseKy,
 				'domain'  => $domain,
 				'version' => $this->config->getVersion()
 			] );
 
-			$license->setLicenseKey( GeneralUtils::redactString( $licenseId, 8 ) );
+			$license->setLicenseKey( GeneralUtils::redactString( $licenseKy, 8 ) );
 			$license->setStatus( License::ACTIVE );
 			$license->setSecret( $domain->secret );
 			$license->setDomain( $domain->domain );
@@ -63,13 +67,22 @@ class AdminAjaxController {
 			$license->save();
 
 			ob_start();
-			$this->config->getSettings()->render();
+			$this->config->getLicenseSettings()->render();
 			$html = ob_get_clean();
 
 			$this->send_ajax_success_response( [
 				'license' => $license->toArray(),
-				'message' => Notice::renderSuccess( 'Your site has been activated.' ),
-				'html'    => $html
+				'notice'  => [
+					'code'    => 'activation_success',
+					'message' => __( 'Your site has been activated.', 'paidcommunities' )
+				],
+				'html'    => $html,
+				'license' => [
+					'domain'      => $license->getDomain(),
+					'domain_id'   => $license->getDomainId(),
+					'registered'  => $license->isRegistered(),
+					'license_key' => $license->getLicenseKey()
+				]
 			] );
 		} catch ( \Exception $e ) {
 			$this->send_ajax_error_response( $e );
@@ -77,10 +90,15 @@ class AdminAjaxController {
 	}
 
 	public function handleLicenseDeactivate() {
-		check_admin_referer( "{$this->config->getPluginSlug()}-nonce", 'nonce' );
 		$license = $this->config->getLicense();
 		$client  = new WordPressClient( 'sandbox' );
 		try {
+			$this->verify_admin_nonce();
+
+			if ( ! current_user_can( 'administrator' ) ) {
+				throw new \Exception( __( 'Administrator access is required to perform this action.', 'paidcommunities' ), 403 );
+			}
+
 			$id = $license->getDomainId();
 
 			if ( ! $id ) {
@@ -93,12 +111,21 @@ class AdminAjaxController {
 			$license->delete();
 
 			ob_start();
-			$this->config->getSettings()->render();
+			$this->config->getLicenseSettings()->render();
 			$html = ob_get_clean();
 
 			$this->send_ajax_success_response( [
-				'message' => Notice::renderSuccess( 'Your site has been deactivated.' ),
-				'html'    => $html
+				'notice'  => [
+					'code'    => 'deactivation_success',
+					'message' => esc_html__( 'Your site has been deactivated.', 'paidcommunities' ),
+				],
+				'html'    => $html,
+				'license' => [
+					'domain'      => $license->getDomain(),
+					'domain_id'   => $license->getDomainId(),
+					'registered'  => $license->isRegistered(),
+					'license_key' => $license->getLicenseKey()
+				]
 			] );
 		} catch ( \Exception $e ) {
 			$this->send_ajax_error_response( $e );
@@ -116,9 +143,21 @@ class AdminAjaxController {
 		\wp_send_json( [
 			'success' => false,
 			'error'   => [
-				'message' => Notice::renderError( $e->getMessage() )
+				'code'    => 'activation_error',
+				'message' => esc_html( $e->getMessage() )
 			]
 		] );
+	}
+
+	private function verify_admin_nonce() {
+		$nonce = isset( $_REQUEST['nonce'] ) ? $_REQUEST['nonce'] : false;
+		if ( ! $nonce ) {
+			throw new \Exception( __( 'Requests require a nonce parameter.', 'paidcommunities' ) );
+		}
+		$result = \wp_verify_nonce( $nonce, "{$this->config->getPluginSlug()}-action" );
+		if ( ! $result ) {
+			throw new \Exception( __( 'Unauthorized request.', 'paidcommunities' ), 403 );
+		}
 	}
 
 }

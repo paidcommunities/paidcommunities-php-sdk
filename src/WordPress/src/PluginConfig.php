@@ -2,6 +2,7 @@
 
 namespace PaidCommunities\WordPress;
 
+use PaidCommunities\WordPress\Admin\AdminScripts;
 use PaidCommunities\WordPress\Admin\LicenseSettings;
 use PaidCommunities\WordPress\Assets\AssetsApi;
 use PaidCommunities\WordPress\HttpClient\WordPressClient;
@@ -36,11 +37,16 @@ class PluginConfig {
 	}
 
 	private function initialize() {
-		$this->settings       = new LicenseSettings( $this, new AssetsApi( $this->baseDir, plugin_dir_url( __DIR__ ), $this->version ) );
+		$assets_api           = new AssetsApi( $this->baseDir, plugin_dir_url( __DIR__ ), $this->version );
+		$this->settings       = new LicenseSettings( $this, $assets_api );
 		$this->ajaxController = new \PaidCommunities\WordPress\Admin\AdminAjaxController( $this );
 		$this->client         = new WordPressClient();
 		$this->updates        = new UpdateController( $this, $this->client );
 		$this->updates->initialize();
+
+		if ( is_admin() ) {
+			( new AdminScripts( $this, $assets_api ) )->initialize();
+		}
 	}
 
 	public function getVersion() {
@@ -55,7 +61,10 @@ class PluginConfig {
 		return $this->getOptionPrefix() . $this->slug . '_settings';
 	}
 
-	public function getSettings() {
+	/**
+	 * @return LicenseSettings
+	 */
+	public function getLicenseSettings() {
 		return $this->settings;
 	}
 
@@ -64,16 +73,6 @@ class PluginConfig {
 	 */
 	public function getUpdateController() {
 		return $this->updates;
-	}
-
-	public function updateSettings( $data ) {
-		\update_option( $this->getOptionName(), $data, true );
-	}
-
-	public function addSubmenu( $parent_slug, $title, $menu_title, $capability, $callback = '', $position = null ) {
-		$callback = $callback ?: [ $this->settings, 'render' ];
-		$slug     = "{$this->slug}_license";
-		add_submenu_page( $parent_slug, $title, $menu_title, $capability, $slug, $callback, $position );
 	}
 
 	public function getPluginSlug() {
