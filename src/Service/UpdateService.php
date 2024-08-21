@@ -6,7 +6,7 @@ use PaidCommunities\Model\SoftwareUpdate;
 
 class UpdateService extends AuthenticatedService {
 
-	protected $path = '/update-check';
+	protected $path = '/update_check';
 
 	/**
 	 * @param $request
