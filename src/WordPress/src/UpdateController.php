@@ -12,11 +12,8 @@ class UpdateController {
 
 	private $config;
 
-	private $client;
-
-	public function __construct( PluginConfig $config, WordPressClient $client ) {
+	public function __construct( PluginConfig $config ) {
 		$this->config = $config;
-		$this->client = $client;
 	}
 
 	public function initialize() {
@@ -39,8 +36,8 @@ class UpdateController {
 			$domain  = $license->getDomainId();
 
 			if ( $secret && $domain ) {
-				$this->client->setSecret( $secret );
-				$response = $this->client->updates->check( [
+				$client   = new WordPressClient( $this->config->getEnvironment(), $secret );
+				$response = $client->updates->check( [
 					'domain'  => $domain,
 					'version' => $pluginData['Version']
 				] );

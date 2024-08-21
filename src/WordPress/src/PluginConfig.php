@@ -2,6 +2,7 @@
 
 namespace PaidCommunities\WordPress;
 
+use PaidCommunities\HttpClient\AbstractClient;
 use PaidCommunities\WordPress\Admin\AdminScripts;
 use PaidCommunities\WordPress\Admin\LicenseSettings;
 use PaidCommunities\WordPress\Assets\AssetsApi;
@@ -19,20 +20,21 @@ class PluginConfig {
 
 	private $ajaxController;
 
-	private $client;
-
 	private $updates;
 
 	private $baseDir;
 
+	private $environment;
+
 	/**
-	 * @param string $slug    The name of the plugin
+	 * @param string $slug The name of the plugin
 	 * @param string $version The current version of the plugin
 	 */
 	public function __construct( $slug, $version ) {
-		$this->slug    = $slug;
-		$this->version = $version;
-		$this->baseDir = dirname( __DIR__ );
+		$this->slug        = $slug;
+		$this->version     = $version;
+		$this->baseDir     = dirname( __DIR__ );
+		$this->environment = AbstractClient::PRODUCTION;
 		$this->initialize();
 	}
 
@@ -40,13 +42,29 @@ class PluginConfig {
 		$assets_api           = new AssetsApi( $this->baseDir, plugin_dir_url( __DIR__ ), $this->version );
 		$this->settings       = new LicenseSettings( $this, $assets_api );
 		$this->ajaxController = new \PaidCommunities\WordPress\Admin\AdminAjaxController( $this );
-		$this->client         = new WordPressClient();
-		$this->updates        = new UpdateController( $this, $this->client );
+		$this->updates        = new UpdateController( $this );
 		$this->updates->initialize();
 
 		if ( is_admin() ) {
 			( new AdminScripts( $this, $assets_api ) )->initialize();
 		}
+	}
+
+	public function environment( $environment ) {
+		if ( ! \in_array( $environment, [ AbstractClient::SANDBOX, AbstractClient::PRODUCTION ] ) ) {
+			throw new \Exception( sprintf( 'Invalid environment value. Accepted values are %1$s or %2$s', AbstractClient::SANDBOX, AbstractClient::PRODUCTION ) );
+		}
+		$this->environment = $environment;
+
+		return $this;
+	}
+
+	public function getEnvironment() {
+		return $this->environment;
+	}
+
+	public function getClient() {
+		return new WordPressClient( $this->environment );
 	}
 
 	public function getVersion() {
