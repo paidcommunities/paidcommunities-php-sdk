@@ -1,6 +1,6 @@
 {
   "name": "paidcommunities/paidcommunities-php",
-  "description": "PHP SDK for the Paid Communities API",
+  "description": "PHP SDK for the PaidCommunities API",
   "autoload": {
     "psr-4": {
       "PaidCommunities\\": "src/",
