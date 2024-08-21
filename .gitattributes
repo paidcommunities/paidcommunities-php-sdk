@@ -9,3 +9,6 @@ phpunit.xml export-ignore
 .distignore export-ignore
 .gitattributes export-ignore
 webpack.config.json export-ignore
+webpack.config.js export-ignore
+/src/WordPress/assets
+/src/WordPress/bin

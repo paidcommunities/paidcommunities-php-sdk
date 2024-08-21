@@ -9,6 +9,8 @@ use PaidCommunities\WordPress\WordPressUtils;
 
 class AdminScripts {
 
+	private $config;
+
 	private $assets;
 
 	private $data;
