@@ -57,4 +57,11 @@ class AdminScripts {
 		] );
 	}
 
+	public function print_datazzz() {
+		$handle = 'paidcommunities-license-' . WordPressUtils::formatPluginName( $this->config->getPluginFile() );
+		if ( wp_script_is( $handle ) ) {
+			$this->data->add_inline_script( 'paidcommunitiesLicenseParams', $handle );
+		}
+	}
+
 }
