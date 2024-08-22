@@ -5,9 +5,9 @@
                 <label class="PaidCommunitiesLabel-root"><?php esc_html_e( 'License Key', 'paidcommunities' ) ?></label>
                 <div class="PaidCommunitiesInputBase-root <?php if ( $license->isRegistered() ) { ?> LicenseRegistered<?php } ?>">
 					<?php if ( $license->isRegistered() ): ?>
-                        <input id="<?php echo esc_attr( $slug ) ?>-license_key" class="PaidCommunitiesInput-text LicenseKey" type="text" disabled value="<?php echo esc_attr( $license->getLicenseKey() ) ?>"/>
+                        <input id="<?php echo esc_attr( $plugin_name ) ?>-license_key" class="PaidCommunitiesInput-text LicenseKey" type="text" disabled value="<?php echo esc_attr( $license->getLicenseKey() ) ?>"/>
 					<?php else: ?>
-                        <input id="<?php echo esc_attr( $slug ) ?>-license_key" class="PaidCommunitiesInput-text LicenseKey"/>
+                        <input id="<?php echo esc_attr( $plugin_name ) ?>-license_key" class="PaidCommunitiesInput-text LicenseKey"/>
 					<?php endif ?>
                 </div>
 				<?php if ( $license->isRegistered() ): ?>

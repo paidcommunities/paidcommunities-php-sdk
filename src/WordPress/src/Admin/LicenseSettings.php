@@ -5,6 +5,7 @@ namespace PaidCommunities\WordPress\Admin;
 use PaidCommunities\WordPress\Assets\AssetDataApi;
 use PaidCommunities\WordPress\Assets\AssetsApi;
 use PaidCommunities\WordPress\PluginConfig;
+use PaidCommunities\WordPress\WordPressUtils;
 
 class LicenseSettings {
 
@@ -26,8 +27,8 @@ class LicenseSettings {
 	}
 
 	public function render() {
-		$license = $this->config->getLicense();
-		$slug    = $this->config->getPluginSlug();
+		$license     = $this->config->getLicense();
+		$plugin_name = WordPressUtils::formatPluginName( $this->config->getPluginFile() );
 
 		wp_enqueue_script( 'paidcommunities-license' );
 		wp_enqueue_style( 'paidcommunities-styles' );

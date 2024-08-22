@@ -4,7 +4,8 @@ import {activate, deactivate} from '@paidcommunities/wordpress-api';
 
 const getValue = key => paidcommunitiesLicenseParams[key] || null;
 
-const slug = getValue('slug');
+const name = getValue('name');
+const id = getValue('formattedPluginFile');
 
 const handleButtonClick = async e => {
     e.preventDefault();
@@ -19,16 +20,16 @@ const handleButtonClick = async e => {
 
             const data = {
                 nonce: getValue('nonce'),
-                license_key: $(`#${slug}-license_key`).val()
+                license_key: $(`#${id}-license_key`).val()
             }
 
-            response = await activate(slug, data);
+            response = await activate(name, data);
 
         } else {
             $button.text(getValue('i18n').deactivateMsg);
             const nonce = getValue('nonce');
 
-            response = await deactivate(slug, {nonce});
+            response = await deactivate(name, {nonce});
         }
         if (!response.success) {
             addNotice(response.error, 'error');

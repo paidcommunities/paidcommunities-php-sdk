@@ -30,31 +30,31 @@ class UpdateController {
 	 * @return void
 	 */
 	public function checkPluginUpdates( $update, $pluginData, $pluginFile ) {
-		try {
-			$license = $this->config->getLicense();
-			$secret  = $license->getSecret();
-			$domain  = $license->getDomainId();
+		if ( $pluginFile === $this->config->getPluginFile() ) {
+			try {
+				$license = $this->config->getLicense();
+				$secret  = $license->getSecret();
 
-			if ( $secret && $domain ) {
-				$client   = new WordPressClient( $this->config->getEnvironment(), $secret );
-				$response = $client->updates->check( [
-					'domain'  => $domain,
-					'version' => $pluginData['Version']
-				] );
-				if ( $response ) {
-					$update = [
-						'new_version' => $response->version,
-						'version'     => $pluginData['Version'],
-						'package'     => $response->package,
-						'slug'        => $this->config->getPluginSlug()
-					];
-					$license->setLastCheck( $response->lastCheck );
-					$license->save();
+				if ( $secret ) {
+					$client   = new WordPressClient( $this->config->getEnvironment(), $secret );
+					$response = $client->updates->check( [
+						'version' => $pluginData['Version']
+					] );
+					if ( $response ) {
+						$update = [
+							'new_version' => $response->version,
+							'version'     => $pluginData['Version'],
+							'package'     => $response->package,
+							'slug'        => $this->config->getPluginSlug()
+						];
+						$license->setLastCheck( $response->lastCheck );
+						$license->save();
+					}
 				}
+			} catch ( ApiErrorException $e ) {
+				// add logging
+				error_log( $e->getMessage() );
 			}
-		} catch ( ApiErrorException $e ) {
-			// add logging
-			error_log( $e->getMessage() );
 		}
 
 		return $update;

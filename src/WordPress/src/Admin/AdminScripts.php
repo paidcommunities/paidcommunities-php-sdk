@@ -36,9 +36,9 @@ class AdminScripts {
 	}
 
 	private function add_data() {
-		$this->data->add( 'slug', $this->config->getPluginSlug() );
-		$this->data->add( 'nonce', WordPressUtils::createNonce( $this->config->getPluginSlug() ) );
-		$this->data->add( 'pluginName', $this->config->getPluginSlug() );
+		$this->data->add( 'name', $this->config->getPluginFile() );
+		$this->data->add( 'formattedPluginFile', WordPressUtils::formatPluginName( $this->config->getPluginFile() ) );
+		$this->data->add( 'nonce', WordPressUtils::createNonce( $this->config->getPluginFile() ) );
 		$this->data->add( 'license', [
 			'domain'      => $this->config->getLicense()->getDomain(),
 			'domain_id'   => $this->config->getLicense()->getDomainId(),

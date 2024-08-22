@@ -10,6 +10,8 @@ use PaidCommunities\WordPress\HttpClient\WordPressClient;
 
 class PluginConfig {
 
+	private $plugin_file;
+
 	private $slug;
 
 	private $version;
@@ -27,11 +29,12 @@ class PluginConfig {
 	private $environment;
 
 	/**
-	 * @param string $slug The name of the plugin
+	 * @param string $slug    The name of the plugin
 	 * @param string $version The current version of the plugin
 	 */
-	public function __construct( $slug, $version ) {
-		$this->slug        = $slug;
+	public function __construct( $plugin_file, $version ) {
+		$this->plugin_file = $plugin_file;
+		$this->slug        = dirname( $plugin_file );
 		$this->version     = $version;
 		$this->baseDir     = dirname( __DIR__ );
 		$this->environment = AbstractClient::PRODUCTION;
@@ -95,6 +98,10 @@ class PluginConfig {
 
 	public function getPluginSlug() {
 		return $this->slug;
+	}
+
+	public function getPluginFile() {
+		return $this->plugin_file;
 	}
 
 	/**

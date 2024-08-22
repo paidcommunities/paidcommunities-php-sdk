@@ -20,7 +20,7 @@ class AdminAjaxController {
 	];
 
 	public function __construct( PluginConfig $config ) {
-		$this->name   = $config->getPluginSlug();
+		$this->name   = $config->getPluginFile();
 		$this->config = $config;
 		$this->initialize();
 	}
@@ -91,7 +91,7 @@ class AdminAjaxController {
 
 	public function handleLicenseDeactivate() {
 		$license = $this->config->getLicense();
-		$client  = new WordPressClient( 'sandbox' );
+		$client  = new WordPressClient( $this->config->getEnvironment() );
 		try {
 			$this->verify_admin_nonce();
 
@@ -154,7 +154,7 @@ class AdminAjaxController {
 		if ( ! $nonce ) {
 			throw new \Exception( __( 'Requests require a nonce parameter.', 'paidcommunities' ) );
 		}
-		$result = \wp_verify_nonce( $nonce, "{$this->config->getPluginSlug()}-action" );
+		$result = \wp_verify_nonce( $nonce, "{$this->config->getPluginFile()}-action" );
 		if ( ! $result ) {
 			throw new \Exception( __( 'Unauthorized request.', 'paidcommunities' ), 403 );
 		}
