@@ -7,7 +7,12 @@ const handleButtonClick = async e => {
     let response;
     let $button = $(e.currentTarget);
     const props = $button.data('paidcommunities-props');
-    const {name, id, nonce} = props;
+    const {
+        name,
+        formattedPluginFile,
+        nonce
+    } = props;
+
     let text = $button.text();
     try {
         $button.prop('disabled', true).addClass('updating-message');
@@ -17,7 +22,7 @@ const handleButtonClick = async e => {
 
             const data = {
                 nonce,
-                license_key: $(`#${id}-license_key`).val()
+                license_key: $(`#${formattedPluginFile}-license_key`).val()
             }
 
             response = await activate(name, data);
@@ -28,13 +33,13 @@ const handleButtonClick = async e => {
             response = await deactivate(name, {nonce});
         }
         if (!response.success) {
-            addNotice(response.error, 'error', props.i18n);
+            addNotice(props.i18n, response.error, 'error');
         } else {
-            addNotice(response.data.notice, 'success', props.i18n);
+            addNotice(props.i18n, response.data.notice, 'success');
             $('.PaidCommunitiesLicense-settings').replaceWith(response.data.html);
         }
     } catch (error) {
-        return addNotice(error);
+        return addNotice(props.i18n, error);
     } finally {
         $button.prop('disabled', false);
         $button.text(text).removeClass('updating-message');

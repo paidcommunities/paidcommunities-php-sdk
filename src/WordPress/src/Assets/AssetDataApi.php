@@ -4,10 +4,30 @@ namespace PaidCommunities\WordPress\Assets;
 
 class AssetDataApi {
 
+	private $name;
+
 	private $data = [];
 
-	public function add( $key, $data ) {
-		$this->data[ $key ] = $data;
+	public function __construct( $plugin_name, $global = false ) {
+		$this->name = $plugin_name;
+	}
+
+	public function get_name() {
+		return $this->name;
+	}
+
+	/**
+	 * @param mixed $key
+	 * @param       $data
+	 *
+	 * @return void
+	 */
+	public function add( mixed $key, $data = null ) {
+		if ( \is_array( $key ) ) {
+			$this->data = $key;
+		} else {
+			$this->data[ $key ] = $data;
+		}
 	}
 
 	public function get( $key, $default = null ) {

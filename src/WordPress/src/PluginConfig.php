@@ -3,6 +3,7 @@
 namespace PaidCommunities\WordPress;
 
 use PaidCommunities\HttpClient\AbstractClient;
+use PaidCommunities\WordPress\Admin\AdminAjaxController;
 use PaidCommunities\WordPress\Admin\AdminScripts;
 use PaidCommunities\WordPress\Admin\LicenseSettings;
 use PaidCommunities\WordPress\Assets\AssetsApi;
@@ -44,7 +45,7 @@ class PluginConfig {
 	private function initialize() {
 		$assets_api           = new AssetsApi( $this->baseDir, plugin_dir_url( __DIR__ ), $this->version );
 		$this->settings       = new LicenseSettings( $this );
-		$this->ajaxController = new \PaidCommunities\WordPress\Admin\AdminAjaxController( $this );
+		$this->ajaxController = new AdminAjaxController( $this );
 		$this->updates        = new UpdateController( $this );
 		$this->updates->initialize();
 

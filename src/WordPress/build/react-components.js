@@ -1,16 +1,16 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./assets/js/react/license-component.js":
 /*!**********************************************!*\
   !*** ./assets/js/react/license-component.js ***!
   \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ LicenseComponent)
+/* harmony export */   "default": function() { return /* binding */ LicenseComponent; }
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
@@ -27,15 +27,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function LicenseComponent() {
+function LicenseComponent(_ref) {
+  let {
+    name
+  } = _ref;
+  if (!paidcommunitiesParams[name]) {
+    throw new Error('Invalid name provided to LicenseComponent.');
+  }
+  const params = paidcommunitiesParams[name];
   const [licenseKey, setLicenseKey] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-  const [license, setLicense] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(paidcommunitiesLicenseParams.license);
+  const [license, setLicense] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(params.license);
   const [processing, setProcessing] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const {
     i18n,
-    nonce,
-    slug
-  } = paidcommunitiesLicenseParams;
+    nonce
+  } = params;
   const onChange = event => setLicenseKey(event.target.value);
   const onActivate = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async () => {
     setProcessing(true);
@@ -44,15 +50,15 @@ function LicenseComponent() {
         nonce,
         license_key: licenseKey
       };
-      const response = await (0,_paidcommunities_wordpress_api__WEBPACK_IMPORTED_MODULE_2__.activate)(slug, data);
+      const response = await (0,_paidcommunities_wordpress_api__WEBPACK_IMPORTED_MODULE_2__.activate)(name, data);
       if (!response.success) {
-        addNotice(response.error, 'error');
+        addNotice(i18n, response.error, 'error');
       } else {
-        addNotice(response.data.notice, 'success');
+        addNotice(i18n, response.data.notice, 'success');
         setLicense(response.data.license);
       }
     } catch (error) {
-      addNotice(error, 'error');
+      addNotice(i18n, error, 'error');
     } finally {
       setProcessing(false);
     }
@@ -60,18 +66,18 @@ function LicenseComponent() {
   const onDeactivate = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)(async () => {
     setProcessing(true);
     try {
-      const response = await (0,_paidcommunities_wordpress_api__WEBPACK_IMPORTED_MODULE_2__.deactivate)(slug, {
+      const response = await (0,_paidcommunities_wordpress_api__WEBPACK_IMPORTED_MODULE_2__.deactivate)(name, {
         nonce
       });
       if (!response.success) {
-        addNotice(response.error, 'error');
+        addNotice(i18n, response.error, 'error');
       } else {
-        addNotice(response.data.notice, 'success');
+        addNotice(i18n, response.data.notice, 'success');
         setLicense(response.data.license);
         setLicenseKey('');
       }
     } catch (error) {
-      addNotice(error, 'error');
+      addNotice(i18n, error, 'error');
     } finally {
       setProcessing(false);
     }
@@ -91,30 +97,30 @@ function LicenseComponent() {
       'LicenseRegistered': license.registered
     })
   }, license.registered && /*#__PURE__*/React.createElement("input", {
-    className: "PaidComunitiesInput-text LicenseKey",
+    className: "PaidCommunitiesInput-text LicenseKey",
     type: 'text',
     disabled: true,
     value: license.license_key
   }), !license.registered && /*#__PURE__*/React.createElement("input", {
-    className: "PaidComunitiesInput-text LicenseKey",
+    className: "PaidCommunitiesInput-text LicenseKey",
     value: licenseKey,
     onChange: onChange
   })), license.registered && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    variant: 'primary',
+    variant: 'secondary',
     text: processing ? i18n.deactivateMsg : i18n.deactivateLicense,
     isBusy: processing,
     disabled: processing,
     onClick: onDeactivate
   }), !license.registered && /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    variant: 'primary',
+    variant: 'secondary',
     text: processing ? i18n.activateMsg : i18n.activateLicense,
     isBusy: processing,
     disabled: processing,
     onClick: onActivate
   })))));
 }
-const addNotice = (notice, type) => {
-  sweetalert__WEBPACK_IMPORTED_MODULE_3___default()(paidcommunitiesLicenseParams.i18n[notice.code], notice.message, type);
+const addNotice = (i18n, notice, type) => {
+  sweetalert__WEBPACK_IMPORTED_MODULE_3___default()(i18n[notice.code], notice.message, type);
 };
 
 /***/ }),
@@ -133,7 +139,7 @@ const addNotice = (notice, type) => {
 /*!***********************************************!*\
   !*** external ["paidcommunities","wp","api"] ***!
   \***********************************************/
-/***/ ((module) => {
+/***/ (function(module) {
 
 "use strict";
 module.exports = window["paidcommunities"]["wp"]["api"];
@@ -144,7 +150,7 @@ module.exports = window["paidcommunities"]["wp"]["api"];
 /*!************************************!*\
   !*** external ["wp","components"] ***!
   \************************************/
-/***/ ((module) => {
+/***/ (function(module) {
 
 "use strict";
 module.exports = window["wp"]["components"];
@@ -155,7 +161,7 @@ module.exports = window["wp"]["components"];
 /*!*********************************!*\
   !*** external ["wp","element"] ***!
   \*********************************/
-/***/ ((module) => {
+/***/ (function(module) {
 
 "use strict";
 module.exports = window["wp"]["element"];
@@ -166,7 +172,7 @@ module.exports = window["wp"]["element"];
 /*!******************************************!*\
   !*** ./node_modules/classnames/index.js ***!
   \******************************************/
-/***/ ((module, exports) => {
+/***/ (function(module, exports) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	Copyright (c) 2018 Jed Watson.
@@ -276,62 +282,61 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
+/******/ 		__webpack_require__.n = function(module) {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
+!function() {
 "use strict";
 /*!**********************************!*\
   !*** ./assets/js/react/index.js ***!
   \**********************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   LicenseComponent: () => (/* reexport safe */ _license_component__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   LicenseComponent: function() { return /* reexport safe */ _license_component__WEBPACK_IMPORTED_MODULE_0__["default"]; }
 /* harmony export */ });
 /* harmony import */ var _license_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./license-component */ "./assets/js/react/license-component.js");
 
-})();
-
-((this.paidcommunities = this.paidcommunities || {}).wp = this.paidcommunities.wp || {}).react = __webpack_exports__;
+}();
+((window.paidcommunities = window.paidcommunities || {}).wp = window.paidcommunities.wp || {}).react = __webpack_exports__;
 /******/ })()
 ;
 //# sourceMappingURL=react-components.js.map
