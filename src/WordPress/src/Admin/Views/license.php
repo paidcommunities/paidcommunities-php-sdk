@@ -11,9 +11,9 @@
 					<?php endif ?>
                 </div>
 				<?php if ( $license->isRegistered() ): ?>
-                    <button class="button PaidCommunitiesButton-root DeactivateLicense"><?php esc_html_e( 'Deacticate License', 'paidcommunities' ) ?></button>
+                    <button class="button PaidCommunitiesButton-root DeactivateLicense" data-paidcommunities-props="<?php echo $json_data ?>"><?php esc_html_e( 'Deacticate License', 'paidcommunities' ) ?></button>
 				<?php else: ?>
-                    <button class="button PaidCommunitiesButton-root ActivateLicense"><?php esc_html_e( 'Activate License', 'paidcommunities' ) ?></button>
+                    <button class="button PaidCommunitiesButton-root ActivateLicense" data-paidcommunities-props="<?php echo $json_data ?>"><?php esc_html_e( 'Activate License', 'paidcommunities' ) ?></button>
 				<?php endif ?>
             </div>
         </div>

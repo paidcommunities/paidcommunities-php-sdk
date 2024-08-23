@@ -3,6 +3,7 @@
 namespace PaidCommunities\WordPress;
 
 use PaidCommunities\HttpClient\AbstractClient;
+use PaidCommunities\WordPress\Admin\AdminAjaxController;
 use PaidCommunities\WordPress\Admin\AdminScripts;
 use PaidCommunities\WordPress\Admin\LicenseSettings;
 use PaidCommunities\WordPress\Assets\AssetsApi;
@@ -43,8 +44,8 @@ class PluginConfig {
 
 	private function initialize() {
 		$assets_api           = new AssetsApi( $this->baseDir, plugin_dir_url( __DIR__ ), $this->version );
-		$this->settings       = new LicenseSettings( $this, $assets_api );
-		$this->ajaxController = new \PaidCommunities\WordPress\Admin\AdminAjaxController( $this );
+		$this->settings       = new LicenseSettings( $this );
+		$this->ajaxController = new AdminAjaxController( $this );
 		$this->updates        = new UpdateController( $this );
 		$this->updates->initialize();
 
@@ -114,6 +115,30 @@ class PluginConfig {
 		}
 
 		return $this->license;
+	}
+
+	public function getPluginData() {
+		return [
+			'name'                => $this->getPluginFile(),
+			'formattedPluginFile' => WordPressUtils::formatPluginName( $this->getPluginFile() ),
+			'nonce'               => WordPressUtils::createNonce( $this->getPluginFile() ),
+			'license'             => [
+				'domain'      => $this->getLicense()->getDomain(),
+				'domain_id'   => $this->getLicense()->getDomainId(),
+				'registered'  => $this->getLicense()->isRegistered(),
+				'license_key' => $this->getLicense()->getLicenseKey()
+			],
+			'i18n'                => [
+				'activateLicense'      => __( 'Activate License', 'paidcommunities' ),
+				'deactivateLicense'    => __( 'Deactivate License', 'paidcommunities' ),
+				'licenseKey'           => __( 'License Key', 'paidcommunities' ),
+				'activateMsg'          => __( 'Activating...', 'paidcommunities' ),
+				'deactivateMsg'        => __( 'Deactivating...', 'paidcommunities' ),
+				'activation_error'     => __( 'Activation Error!', 'paidcommunities' ),
+				'activation_success'   => __( 'Activation Success!', 'paidcommunities' ),
+				'deactivation_success' => __( 'De-activation Success!', 'paidcommunities' ),
+			]
+		];
 	}
 
 }

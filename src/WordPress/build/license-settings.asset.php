@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('jquery', 'paidcommunities-wordpress-api', 'wp-polyfill'), 'version' => '04b00ce370ecf6632d9a');
+<?php return array('dependencies' => array('jquery', 'paidcommunities-wordpress-api', 'wp-polyfill'), 'version' => '26d87bcfc7efa51757bc');

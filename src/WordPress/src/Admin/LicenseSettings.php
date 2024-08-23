@@ -11,19 +11,11 @@ class LicenseSettings {
 
 	private $config;
 
-	private $assets;
-
 	protected $callback;
 
-	private $options;
-
-	private $data;
-
-	public function __construct( PluginConfig $config, AssetsApi $assets, $callback = null ) {
+	public function __construct( PluginConfig $config, $callback = null ) {
 		$this->config   = $config;
-		$this->assets   = $assets;
 		$this->callback = $callback;
-		$this->data     = new AssetDataApi();
 	}
 
 	public function render() {
@@ -32,6 +24,8 @@ class LicenseSettings {
 
 		wp_enqueue_script( 'paidcommunities-license' );
 		wp_enqueue_style( 'paidcommunities-styles' );
+
+		$json_data = _wp_specialchars( wp_json_encode( $this->config->getPluginData() ), ENT_QUOTES, 'UTF-8', true );
 
 		if ( $this->callback ) {
 			$callback = $this->callback;

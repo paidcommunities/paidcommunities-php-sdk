@@ -1,4 +1,4 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./node_modules/sweetalert/dist/sweetalert.min.js":
@@ -15,7 +15,7 @@
 /*!*************************!*\
   !*** external "jQuery" ***!
   \*************************/
-/***/ ((module) => {
+/***/ (function(module) {
 
 "use strict";
 module.exports = window["jQuery"];
@@ -26,7 +26,7 @@ module.exports = window["jQuery"];
 /*!***********************************************!*\
   !*** external ["paidcommunities","wp","api"] ***!
   \***********************************************/
-/***/ ((module) => {
+/***/ (function(module) {
 
 "use strict";
 module.exports = window["paidcommunities"]["wp"]["api"];
@@ -61,49 +61,49 @@ module.exports = window["paidcommunities"]["wp"]["api"];
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
+/******/ 		__webpack_require__.n = function(module) {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
+!function() {
 "use strict";
 /*!***************************************!*\
   !*** ./assets/js/license-settings.js ***!
@@ -122,41 +122,36 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 
 
 
-var getValue = function getValue(key) {
-  return paidcommunitiesLicenseParams[key] || null;
-};
-var name = getValue('name');
-var id = getValue('formattedPluginFile');
 var handleButtonClick = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-    var response, $button, text, license, data, nonce;
+    var response, $button, props, name, formattedPluginFile, nonce, text, data;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           e.preventDefault();
           $button = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget);
+          props = $button.data('paidcommunities-props');
+          name = props.name, formattedPluginFile = props.formattedPluginFile, nonce = props.nonce;
           text = $button.text();
-          license = getValue('license');
-          _context.prev = 4;
+          _context.prev = 5;
           $button.prop('disabled', true).addClass('updating-message');
           if (!$button.hasClass('ActivateLicense')) {
-            _context.next = 14;
+            _context.next = 15;
             break;
           }
-          $button.text(getValue('i18n').activateMsg);
+          $button.text(props.i18n.activateMsg);
           data = {
-            nonce: getValue('nonce'),
-            license_key: jquery__WEBPACK_IMPORTED_MODULE_0___default()("#".concat(id, "-license_key")).val()
+            nonce: nonce,
+            license_key: jquery__WEBPACK_IMPORTED_MODULE_0___default()("#".concat(formattedPluginFile, "-license_key")).val()
           };
-          _context.next = 11;
+          _context.next = 12;
           return (0,_paidcommunities_wordpress_api__WEBPACK_IMPORTED_MODULE_2__.activate)(name, data);
-        case 11:
+        case 12:
           response = _context.sent;
           _context.next = 19;
           break;
-        case 14:
-          $button.text(getValue('i18n').deactivateMsg);
-          nonce = getValue('nonce');
+        case 15:
+          $button.text(props.i18n.deactivateMsg);
           _context.next = 18;
           return (0,_paidcommunities_wordpress_api__WEBPACK_IMPORTED_MODULE_2__.deactivate)(name, {
             nonce: nonce
@@ -165,17 +160,17 @@ var handleButtonClick = /*#__PURE__*/function () {
           response = _context.sent;
         case 19:
           if (!response.success) {
-            addNotice(response.error, 'error');
+            addNotice(props.i18n, response.error, 'error');
           } else {
-            addNotice(response.data.notice, 'success');
+            addNotice(props.i18n, response.data.notice, 'success');
             jquery__WEBPACK_IMPORTED_MODULE_0___default()('.PaidCommunitiesLicense-settings').replaceWith(response.data.html);
           }
           _context.next = 25;
           break;
         case 22:
           _context.prev = 22;
-          _context.t0 = _context["catch"](4);
-          return _context.abrupt("return", addNotice(_context.t0));
+          _context.t0 = _context["catch"](5);
+          return _context.abrupt("return", addNotice(props.i18n, _context.t0));
         case 25:
           _context.prev = 25;
           $button.prop('disabled', false);
@@ -185,20 +180,18 @@ var handleButtonClick = /*#__PURE__*/function () {
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[4, 22, 25, 29]]);
+    }, _callee, null, [[5, 22, 25, 29]]);
   }));
   return function handleButtonClick(_x) {
     return _ref.apply(this, arguments);
   };
 }();
-var addNotice = function addNotice(notice, type) {
-  sweetalert__WEBPACK_IMPORTED_MODULE_1___default()(paidcommunitiesLicenseParams.i18n[notice.code], notice.message, type);
+var addNotice = function addNotice(i18n, notice, type) {
+  sweetalert__WEBPACK_IMPORTED_MODULE_1___default()(i18n[notice.code], notice.message, type);
 };
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document.body).on('click', '.ActivateLicense', handleButtonClick);
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document.body).on('click', '.DeactivateLicense', handleButtonClick);
-})();
-
-(this.paidcommunities = this.paidcommunities || {}).licenseSettings = __webpack_exports__;
+}();
 /******/ })()
 ;
 //# sourceMappingURL=license-settings.js.map

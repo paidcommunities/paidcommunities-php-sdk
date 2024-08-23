@@ -4,11 +4,15 @@ import {activate, deactivate} from '@paidcommunities/wordpress-api';
 import swal from 'sweetalert';
 import classnames from 'classnames';
 
-export default function LicenseComponent() {
+export default function LicenseComponent({name}) {
+    if (!paidcommunitiesParams[name]) {
+        throw new Error('Invalid name provided to LicenseComponent.');
+    }
+    const params = paidcommunitiesParams[name];
     const [licenseKey, setLicenseKey] = useState('');
-    const [license, setLicense] = useState(paidcommunitiesLicenseParams.license)
+    const [license, setLicense] = useState(params.license)
     const [processing, setProcessing] = useState(false);
-    const {i18n, nonce, slug} = paidcommunitiesLicenseParams;
+    const {i18n, nonce} = params;
 
     const onChange = event => setLicenseKey(event.target.value);
 
@@ -19,15 +23,15 @@ export default function LicenseComponent() {
                 nonce,
                 license_key: licenseKey
             };
-            const response = await activate(slug, data);
+            const response = await activate(name, data);
             if (!response.success) {
-                addNotice(response.error, 'error');
+                addNotice(i18n, response.error, 'error');
             } else {
-                addNotice(response.data.notice, 'success');
+                addNotice(i18n, response.data.notice, 'success');
                 setLicense(response.data.license);
             }
         } catch (error) {
-            addNotice(error, 'error');
+            addNotice(i18n, error, 'error');
         } finally {
             setProcessing(false);
         }
@@ -36,16 +40,16 @@ export default function LicenseComponent() {
     const onDeactivate = useCallback(async () => {
         setProcessing(true);
         try {
-            const response = await deactivate(slug, {nonce});
+            const response = await deactivate(name, {nonce});
             if (!response.success) {
-                addNotice(response.error, 'error');
+                addNotice(i18n, response.error, 'error');
             } else {
-                addNotice(response.data.notice, 'success');
+                addNotice(i18n, response.data.notice, 'success');
                 setLicense(response.data.license);
                 setLicenseKey('');
             }
         } catch (error) {
-            addNotice(error, 'error');
+            addNotice(i18n, error, 'error');
         } finally {
             setProcessing(false);
         }
@@ -61,14 +65,14 @@ export default function LicenseComponent() {
                             'LicenseRegistered': license.registered
                         })}>
                             {license.registered &&
-                                <input className="PaidComunitiesInput-text LicenseKey"
+                                <input className="PaidCommunitiesInput-text LicenseKey"
                                        type={'text'}
                                        disabled
                                        value={license.license_key}/>
                             }
                             {!license.registered &&
                                 <input
-                                    className="PaidComunitiesInput-text LicenseKey"
+                                    className="PaidCommunitiesInput-text LicenseKey"
                                     value={licenseKey}
                                     onChange={onChange}
                                 />
@@ -76,7 +80,7 @@ export default function LicenseComponent() {
                         </div>
                         {license.registered &&
                             <Button
-                                variant={'primary'}
+                                variant={'secondary'}
                                 text={processing ? i18n.deactivateMsg : i18n.deactivateLicense}
                                 isBusy={processing}
                                 disabled={processing}
@@ -85,7 +89,7 @@ export default function LicenseComponent() {
                         }
                         {!license.registered &&
                             <Button
-                                variant={'primary'}
+                                variant={'secondary'}
                                 text={processing ? i18n.activateMsg : i18n.activateLicense}
                                 isBusy={processing}
                                 disabled={processing}
@@ -98,6 +102,6 @@ export default function LicenseComponent() {
     )
 }
 
-const addNotice = (notice, type) => {
-    swal(paidcommunitiesLicenseParams.i18n[notice.code], notice.message, type);
+const addNotice = (i18n, notice, type) => {
+    swal(i18n[notice.code], notice.message, type);
 }
