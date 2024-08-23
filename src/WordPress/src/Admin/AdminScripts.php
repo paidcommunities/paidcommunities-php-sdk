@@ -31,8 +31,8 @@ class AdminScripts {
 		$this->assets->register_script( 'paidcommunities-wp-components', 'build/react-components.js' );
 		$this->assets->register_style( 'paidcommunities-styles', 'build/styles.css' );
 
-		$this->add_data();
-		$this->data->add_inline_script( 'paidcommunitiesLicenseParams', 'paidcommunities-wordpress-api' );
+		//$this->add_data();
+		//$this->data->add_inline_script( 'paidcommunitiesLicenseParams', 'paidcommunities-wordpress-api' );
 	}
 
 	private function add_data() {
@@ -55,13 +55,6 @@ class AdminScripts {
 			'activation_success'   => __( 'Activation Success!', 'paidcommunities' ),
 			'deactivation_success' => __( 'De-activation Success!', 'paidcommunities' ),
 		] );
-	}
-
-	public function print_datazzz() {
-		$handle = 'paidcommunities-license-' . WordPressUtils::formatPluginName( $this->config->getPluginFile() );
-		if ( wp_script_is( $handle ) ) {
-			$this->data->add_inline_script( 'paidcommunitiesLicenseParams', $handle );
-		}
 	}
 
 }

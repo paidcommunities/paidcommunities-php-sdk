@@ -122,41 +122,36 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 
 
 
-var getValue = function getValue(key) {
-  return paidcommunitiesLicenseParams[key] || null;
-};
-var name = getValue('name');
-var id = getValue('formattedPluginFile');
 var handleButtonClick = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-    var response, $button, text, license, data, nonce;
+    var response, $button, props, name, id, nonce, text, data;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           e.preventDefault();
           $button = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget);
+          props = $button.data('paidcommunities-props');
+          name = props.name, id = props.id, nonce = props.nonce;
           text = $button.text();
-          license = getValue('license');
-          _context.prev = 4;
+          _context.prev = 5;
           $button.prop('disabled', true).addClass('updating-message');
           if (!$button.hasClass('ActivateLicense')) {
-            _context.next = 14;
+            _context.next = 15;
             break;
           }
-          $button.text(getValue('i18n').activateMsg);
+          $button.text(props.i18n.activateMsg);
           data = {
-            nonce: getValue('nonce'),
+            nonce: nonce,
             license_key: jquery__WEBPACK_IMPORTED_MODULE_0___default()("#".concat(id, "-license_key")).val()
           };
-          _context.next = 11;
+          _context.next = 12;
           return (0,_paidcommunities_wordpress_api__WEBPACK_IMPORTED_MODULE_2__.activate)(name, data);
-        case 11:
+        case 12:
           response = _context.sent;
           _context.next = 19;
           break;
-        case 14:
-          $button.text(getValue('i18n').deactivateMsg);
-          nonce = getValue('nonce');
+        case 15:
+          $button.text(props.i18n.deactivateMsg);
           _context.next = 18;
           return (0,_paidcommunities_wordpress_api__WEBPACK_IMPORTED_MODULE_2__.deactivate)(name, {
             nonce: nonce
@@ -165,16 +160,16 @@ var handleButtonClick = /*#__PURE__*/function () {
           response = _context.sent;
         case 19:
           if (!response.success) {
-            addNotice(response.error, 'error');
+            addNotice(response.error, 'error', props.i18n);
           } else {
-            addNotice(response.data.notice, 'success');
+            addNotice(response.data.notice, 'success', props.i18n);
             jquery__WEBPACK_IMPORTED_MODULE_0___default()('.PaidCommunitiesLicense-settings').replaceWith(response.data.html);
           }
           _context.next = 25;
           break;
         case 22:
           _context.prev = 22;
-          _context.t0 = _context["catch"](4);
+          _context.t0 = _context["catch"](5);
           return _context.abrupt("return", addNotice(_context.t0));
         case 25:
           _context.prev = 25;
@@ -185,14 +180,14 @@ var handleButtonClick = /*#__PURE__*/function () {
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[4, 22, 25, 29]]);
+    }, _callee, null, [[5, 22, 25, 29]]);
   }));
   return function handleButtonClick(_x) {
     return _ref.apply(this, arguments);
   };
 }();
-var addNotice = function addNotice(notice, type) {
-  sweetalert__WEBPACK_IMPORTED_MODULE_1___default()(paidcommunitiesLicenseParams.i18n[notice.code], notice.message, type);
+var addNotice = function addNotice(i18n, notice, type) {
+  sweetalert__WEBPACK_IMPORTED_MODULE_1___default()(i18n[notice.code], notice.message, type);
 };
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document.body).on('click', '.ActivateLicense', handleButtonClick);
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document.body).on('click', '.DeactivateLicense', handleButtonClick);

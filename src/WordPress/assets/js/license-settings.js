@@ -2,39 +2,35 @@ import $ from 'jquery';
 import swal from 'sweetalert';
 import {activate, deactivate} from '@paidcommunities/wordpress-api';
 
-const getValue = key => paidcommunitiesLicenseParams[key] || null;
-
-const name = getValue('name');
-const id = getValue('formattedPluginFile');
-
 const handleButtonClick = async e => {
     e.preventDefault();
     let response;
     let $button = $(e.currentTarget);
+    const props = $button.data('paidcommunities-props');
+    const {name, id, nonce} = props;
     let text = $button.text();
-    let license = getValue('license');
     try {
         $button.prop('disabled', true).addClass('updating-message');
         if ($button.hasClass('ActivateLicense')) {
-            $button.text(getValue('i18n').activateMsg);
+
+            $button.text(props.i18n.activateMsg);
 
             const data = {
-                nonce: getValue('nonce'),
+                nonce,
                 license_key: $(`#${id}-license_key`).val()
             }
 
             response = await activate(name, data);
 
         } else {
-            $button.text(getValue('i18n').deactivateMsg);
-            const nonce = getValue('nonce');
+            $button.text(props.i18n.deactivateMsg);
 
             response = await deactivate(name, {nonce});
         }
         if (!response.success) {
-            addNotice(response.error, 'error');
+            addNotice(response.error, 'error', props.i18n);
         } else {
-            addNotice(response.data.notice, 'success');
+            addNotice(response.data.notice, 'success', props.i18n);
             $('.PaidCommunitiesLicense-settings').replaceWith(response.data.html);
         }
     } catch (error) {
@@ -45,8 +41,8 @@ const handleButtonClick = async e => {
     }
 }
 
-const addNotice = (notice, type) => {
-    swal(paidcommunitiesLicenseParams.i18n[notice.code], notice.message, type);
+const addNotice = (i18n, notice, type) => {
+    swal(i18n[notice.code], notice.message, type);
 }
 
 $(document.body).on('click', '.ActivateLicense', handleButtonClick);
