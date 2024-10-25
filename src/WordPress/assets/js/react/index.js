@@ -1,1 +1,0 @@
-export {default as LicenseComponent} from './license-component';
