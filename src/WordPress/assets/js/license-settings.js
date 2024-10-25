@@ -8,7 +8,7 @@ const handleButtonClick = async e => {
     let $button = $(e.currentTarget);
     const props = $button.data('paidcommunities-props');
     const {
-        name,
+        slug,
         formattedPluginFile,
         nonce
     } = props;
@@ -25,12 +25,12 @@ const handleButtonClick = async e => {
                 license_key: $(`#${formattedPluginFile}-license_key`).val()
             }
 
-            response = await activate(name, data);
+            response = await activate(slug, data);
 
         } else {
             $button.text(props.i18n.deactivateMsg);
 
-            response = await deactivate(name, {nonce});
+            response = await deactivate(slug, {nonce});
         }
         if (!response.success) {
             addNotice(props.i18n, response.error, 'error');

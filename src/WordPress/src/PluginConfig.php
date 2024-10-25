@@ -6,6 +6,7 @@ use PaidCommunities\HttpClient\AbstractClient;
 use PaidCommunities\WordPress\Admin\AdminAjaxController;
 use PaidCommunities\WordPress\Admin\AdminScripts;
 use PaidCommunities\WordPress\Admin\LicenseSettings;
+use PaidCommunities\WordPress\Admin\Templates;
 use PaidCommunities\WordPress\Assets\AssetsApi;
 use PaidCommunities\WordPress\HttpClient\WordPressClient;
 
@@ -29,16 +30,29 @@ class PluginConfig {
 
 	private $environment;
 
+	private $templates;
+
 	/**
-	 * @param string $slug    The name of the plugin
+	 * @param string $slug The name of the plugin
 	 * @param string $version The current version of the plugin
+	 * @param array $overrides array of optional overrides to customize the default behavior.
 	 */
-	public function __construct( $plugin_file, $version ) {
+	public function __construct( $plugin_file, $version, $overrides = [] ) {
 		$this->plugin_file = $plugin_file;
 		$this->slug        = dirname( $plugin_file );
 		$this->version     = $version;
 		$this->baseDir     = dirname( __DIR__ );
 		$this->environment = AbstractClient::PRODUCTION;
+
+		$overrides = array_merge(
+			[
+				'template_path' => __DIR__ . '/Admin/Views/'
+			],
+			$overrides
+		);
+
+		$this->templates = new Templates( $overrides['template_path'] );
+
 		$this->initialize();
 	}
 
@@ -119,7 +133,7 @@ class PluginConfig {
 
 	public function getPluginData() {
 		return [
-			'name'                => $this->getPluginFile(),
+			'slug'                => $this->getPluginFile(),
 			'formattedPluginFile' => WordPressUtils::formatPluginName( $this->getPluginFile() ),
 			'nonce'               => WordPressUtils::createNonce( $this->getPluginFile() ),
 			'license'             => [
@@ -139,6 +153,10 @@ class PluginConfig {
 				'deactivation_success' => __( 'De-activation Success!', 'paidcommunities' ),
 			]
 		];
+	}
+
+	public function getTemplates() {
+		return $this->templates;
 	}
 
 }
