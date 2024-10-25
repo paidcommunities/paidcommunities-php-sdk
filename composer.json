@@ -1,6 +1,7 @@
 {
   "name": "paidcommunities/paidcommunities-php",
   "description": "PHP SDK for the PaidCommunities API",
+  "license": "MIT",
   "autoload": {
     "psr-4": {
       "PaidCommunities\\": "src/",
