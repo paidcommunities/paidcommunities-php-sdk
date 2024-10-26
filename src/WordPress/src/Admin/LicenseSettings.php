@@ -16,15 +16,13 @@ class LicenseSettings {
 	}
 
 	public function render() {
-		//wp_enqueue_script( 'paidcommunities-license' );
-		//wp_enqueue_style( 'paidcommunities-styles' );
 
 		$data = _wp_specialchars( wp_json_encode( $this->config->getPluginData() ), ENT_QUOTES, 'UTF-8', true );
 
 		$this->config->getTemplates()->loadTemplate(
 			'license.php',
 			[
-				'slug'    => $this->config->getPluginSlug(),
+				'name'    => WordPressUtils::formatPluginName( $this->config->getPluginFile() ),
 				'data'    => $data,
 				'license' => $this->config->getLicense()
 			]
