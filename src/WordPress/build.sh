@@ -13,7 +13,7 @@ cd paidcommunities-wp
 git pull origin main
 
 # Loop through api and components directories
-for dir in api components; do
+for dir in api components license; do
     echo "Checking ${dir} directory..."
     cd "$dir" || exit
 
@@ -31,6 +31,6 @@ for dir in api components; do
 done
 
 echo 'copying dist directory to build'
-cp -R api/build/* components/build/* components/build-style/* "${BASE_PATH}/build"
+cp -R api/build/* components/build/* components/build-style/*  license/build/* "${BASE_PATH}/build"
 
 cd "$BASE_PATH" || exit

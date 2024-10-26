@@ -30,6 +30,7 @@ class AdminScripts {
 	public function register_scripts() {
 		$this->assets->register_script( 'paidcommunities-license', 'build/license-settings.js' );
 		$this->assets->register_script( 'paidcommunities-wp-api', 'build/api.js' );
+		$this->assets->register_script( 'paidcommunities-admin-license', 'build/admin-license.js' );
 		$this->assets->register_script( 'paidcommunities-wp-components', 'build/components.js' );
 		$this->assets->register_style( 'paidcommunities-wp-components', 'build/styles.css' );
 
