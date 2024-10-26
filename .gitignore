@@ -35,3 +35,5 @@ node_modules/
 .phpunit.result.cache
 
 .DS_Store
+
+paidcommunities-wp

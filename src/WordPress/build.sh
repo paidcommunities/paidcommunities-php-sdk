@@ -10,17 +10,27 @@ git clone git@github2.com:paidcommunities/paidcommunities-wp.git
 
 cd paidcommunities-wp
 
-if [ -d "node_modules" ]; then
-  echo "Directory exists. Running npm update..."
-  npm update
-else
-  echo "Directory does not exist. Running npm install..."
-  npm install
-fi
+git pull origin main
 
-npm run build:prod
+# Loop through api and components directories
+for dir in api components; do
+    echo "Checking ${dir} directory..."
+    cd "$dir" || exit
+
+    if [ -d "node_modules" ]; then
+        echo "node_modules exists in ${dir}. Running npm update..."
+        npm update
+    else
+        echo "node_modules does not exist in ${dir}. Running npm install..."
+        npm install
+    fi
+
+    npm run build:prod
+
+    cd .. || exit
+done
 
 echo 'copying dist directory to build'
-cp -R dist/* "${BASE_PATH}/build"
+cp -R api/build/* components/build/* components/build-style/* "${BASE_PATH}/build"
 
 cd "$BASE_PATH" || exit
