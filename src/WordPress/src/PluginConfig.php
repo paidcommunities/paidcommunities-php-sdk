@@ -151,6 +151,7 @@ class PluginConfig {
 				'activation_error'     => __( 'Activation Error!', 'paidcommunities' ),
 				'activation_success'   => __( 'Activation Success!', 'paidcommunities' ),
 				'deactivation_success' => __( 'De-activation Success!', 'paidcommunities' ),
+				'general_error'        => __( 'Activation Error!', 'paidcommunities' )
 			]
 		];
 	}

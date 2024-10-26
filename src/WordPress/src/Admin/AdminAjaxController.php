@@ -114,7 +114,7 @@ class AdminAjaxController {
 			$this->config->getLicenseSettings()->render();
 			$html = ob_get_clean();
 
-			$this->send_ajax_success_response( [
+			$this->sendAjaxSuccessResponse( [
 				'notice'  => [
 					'code'    => 'deactivation_success',
 					'message' => esc_html__( 'Your site has been deactivated.', 'paidcommunities' ),
@@ -128,18 +128,18 @@ class AdminAjaxController {
 				]
 			] );
 		} catch ( \Exception $e ) {
-			$this->send_ajax_error_response( $e );
+			$this->sendAjaxErrorResponse( $e );
 		}
 	}
 
-	private function send_ajax_success_response( $data ) {
+	private function sendAjaxSuccessResponse( $data ) {
 		\wp_send_json( [
 			'success' => true,
 			'data'    => $data
 		] );
 	}
 
-	private function send_ajax_error_response( $e ) {
+	private function sendAjaxErrorResponse( $e ) {
 		\wp_send_json( [
 			'success' => false,
 			'error'   => [

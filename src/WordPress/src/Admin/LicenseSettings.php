@@ -21,7 +21,14 @@ class LicenseSettings {
 
 		$data = _wp_specialchars( wp_json_encode( $this->config->getPluginData() ), ENT_QUOTES, 'UTF-8', true );
 
-		$this->config->getTemplates()->loadTemplate( 'license.php', [ 'data' => $data, 'license' => $this->config->getLicense() ] );
+		$this->config->getTemplates()->loadTemplate(
+			'license.php',
+			[
+				'slug'    => $this->config->getPluginSlug(),
+				'data'    => $data,
+				'license' => $this->config->getLicense()
+			]
+		);
 	}
 
 }
