@@ -41,7 +41,7 @@ class AdminAjaxController {
 		$licenseKy = $_POST['license_key'] ?? '';
 		$domain    = $_SERVER['SERVER_NAME'] ?? '';
 		try {
-			$this->verify_admin_nonce();
+			$this->verifyAdminNonce();
 
 			if ( ! current_user_can( 'administrator' ) ) {
 				throw new \Exception( __( 'Administrator access is required to perform this action.', 'paidcommunities' ), 403 );
@@ -70,7 +70,7 @@ class AdminAjaxController {
 			$this->config->getLicenseSettings()->render();
 			$html = ob_get_clean();
 
-			$this->send_ajax_success_response( [
+			$this->sendAjaxSuccessResponse( [
 				'license' => $license->toArray(),
 				'notice'  => [
 					'code'    => 'activation_success',
@@ -85,7 +85,7 @@ class AdminAjaxController {
 				]
 			] );
 		} catch ( \Exception $e ) {
-			$this->send_ajax_error_response( $e );
+			$this->sendAjaxErrorResponse( $e );
 		}
 	}
 
@@ -93,7 +93,7 @@ class AdminAjaxController {
 		$license = $this->config->getLicense();
 		$client  = new WordPressClient( $this->config->getEnvironment() );
 		try {
-			$this->verify_admin_nonce();
+			$this->verifyAdminNonce();
 
 			if ( ! current_user_can( 'administrator' ) ) {
 				throw new \Exception( __( 'Administrator access is required to perform this action.', 'paidcommunities' ), 403 );
@@ -149,7 +149,7 @@ class AdminAjaxController {
 		] );
 	}
 
-	private function verify_admin_nonce() {
+	private function verifyAdminNonce() {
 		$nonce = isset( $_REQUEST['nonce'] ) ? $_REQUEST['nonce'] : false;
 		if ( ! $nonce ) {
 			throw new \Exception( __( 'Requests require a nonce parameter.', 'paidcommunities' ) );
