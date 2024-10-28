@@ -137,6 +137,7 @@ class PluginConfig {
 			'formattedPluginFile' => WordPressUtils::formatPluginName( $this->getPluginFile() ),
 			'nonce'               => WordPressUtils::createNonce( $this->getPluginFile() ),
 			'license'             => [
+				'status'      => $this->getLicense()->getStatus(),
 				'domain'      => $this->getLicense()->getDomain(),
 				'domain_id'   => $this->getLicense()->getDomainId(),
 				'registered'  => $this->getLicense()->isRegistered(),

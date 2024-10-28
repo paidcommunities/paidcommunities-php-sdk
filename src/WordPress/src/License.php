@@ -132,6 +132,10 @@ class License {
 		return $this->status === self::ACTIVE;
 	}
 
+	public function isInactive() {
+		return $this->status === self::INACTIVE;
+	}
+
 	public function isRegistered() {
 		return strlen( $this->getDomainId() ) > 0;
 	}

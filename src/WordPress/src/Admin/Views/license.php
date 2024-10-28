@@ -3,7 +3,7 @@
         <div class="PaidCommunitiesGrid-item">
             <div class="PaidCommunitiesStack-root LicenseKeyOptionGroup">
                 <label class="PaidCommunitiesLabel-root"><?php esc_html_e( 'License Key', 'paidcommunities' ) ?></label>
-                <div class="PaidCommunitiesInputBase-root <?php if ( $license->isRegistered() ) { ?> LicenseRegistered<?php } ?>">
+                <div class="PaidCommunitiesInputBase-root LicenseStatus-<?php echo esc_attr($license->getStatus()) ?>">
 					<?php if ( $license->isRegistered() ): ?>
                         <input id="<?php echo esc_attr( $name ) ?>-license_key" class="PaidCommunitiesInput-text LicenseKey" type="text" disabled value="<?php echo esc_attr( $license->getLicenseKey() ) ?>"/>
 					<?php else: ?>
