@@ -5,7 +5,8 @@ namespace PaidCommunities\Model;
 class BaseModelFactory extends AbstractModelFactory {
 
 	private $mappings = [
-		'update' => SoftwareUpdate::class
+		'update'  => SoftwareUpdate::class,
+		'license' => License::class
 	];
 
 	protected function getModelClass( $name ) {

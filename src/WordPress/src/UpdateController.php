@@ -47,7 +47,8 @@ class UpdateController {
 							'package'     => $response->package,
 							'slug'        => $this->config->getPluginSlug()
 						];
-						$license->setLastCheck( $response->lastCheck );
+						$license->setLastCheck( $response->last_check );
+						$license->setStatus( $response->license->status );
 						$license->save();
 					}
 				}
