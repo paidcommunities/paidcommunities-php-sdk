@@ -33,6 +33,13 @@ class PluginConfig {
 	private $templates;
 
 	/**
+	 * @var AdminScripts
+	 */
+	private $adminScripts;
+
+	private $optionName;
+
+	/**
 	 * @param string $slug The name of the plugin
 	 * @param string $version The current version of the plugin
 	 * @param array $overrides array of optional overrides to customize the default behavior.
@@ -46,12 +53,14 @@ class PluginConfig {
 
 		$overrides = array_merge(
 			[
-				'template_path' => __DIR__ . '/Admin/Views/'
+				'template_path' => __DIR__ . '/Admin/Views/',
+				'option_name'   => $this->slug . '_license_settings'
 			],
 			$overrides
 		);
 
-		$this->templates = new Templates( $overrides['template_path'] );
+		$this->templates  = new Templates( $overrides['template_path'] );
+		$this->optionName = $overrides['option_name'];
 
 		$this->initialize();
 	}
@@ -61,10 +70,12 @@ class PluginConfig {
 		$this->settings       = new LicenseSettings( $this );
 		$this->ajaxController = new AdminAjaxController( $this );
 		$this->updates        = new UpdateController( $this );
+		$this->adminScripts   = new AdminScripts( $this, $assets_api );
+
 		$this->updates->initialize();
 
 		if ( is_admin() ) {
-			( new AdminScripts( $this, $assets_api ) )->initialize();
+			$this->adminScripts->initialize();
 		}
 	}
 
@@ -124,7 +135,7 @@ class PluginConfig {
 	 */
 	public function getLicense() {
 		if ( ! $this->license ) {
-			$this->license = new License( $this->slug, $this->getOptionPrefix() );
+			$this->license = new License( $this->optionName );
 			$this->license->read();
 		}
 
@@ -159,6 +170,13 @@ class PluginConfig {
 
 	public function getTemplates() {
 		return $this->templates;
+	}
+
+	/**
+	 * @return Admi
+	 */
+	public function getAdminScripts() {
+		return $this->adminScripts;
 	}
 
 }

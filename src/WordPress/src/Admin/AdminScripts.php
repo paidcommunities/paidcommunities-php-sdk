@@ -20,11 +20,14 @@ class AdminScripts {
 		$this->config     = $config;
 		$this->assets     = $assets;
 		$this->asset_data = new AssetDataApi( $config->getPluginFile() );
-		AssetDataRegistry::instance()->register( $this->asset_data );
 	}
 
 	public function initialize() {
-		add_action( 'admin_init', [ $this, 'register_scripts' ] );
+		if ( did_action( 'admin_init' ) ) {
+			$this->register_scripts();
+		} else {
+			add_action( 'admin_init', [ $this, 'register_scripts' ] );
+		}
 	}
 
 	public function register_scripts() {
@@ -33,8 +36,10 @@ class AdminScripts {
 		$this->assets->register_script( 'paidcommunities-admin-license', 'build/admin-license.js' );
 		$this->assets->register_script( 'paidcommunities-wp-components', 'build/components.js' );
 		$this->assets->register_style( 'paidcommunities-wp-components', 'build/styles.css' );
+	}
 
-		$this->asset_data->add( $this->config->getPluginData() );
+	public function getAssetData() {
+		return $this->asset_data;
 	}
 
 }

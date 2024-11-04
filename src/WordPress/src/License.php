@@ -4,9 +4,7 @@ namespace PaidCommunities\WordPress;
 
 class License {
 
-	private $name;
-
-	private $prefix;
+	private $optionName;
 
 	private $licenseKey;
 
@@ -26,9 +24,8 @@ class License {
 
 	const ACTIVE = 'active';
 
-	public function __construct( $name, $prefix ) {
-		$this->name   = $name;
-		$this->prefix = $prefix;
+	public function __construct( $optionName ) {
+		$this->optionName = $optionName;
 	}
 
 	public function save() {
@@ -50,14 +47,14 @@ class License {
 		$data             = \get_option( $this->getOptionName(), [] );
 		$this->licenseKey = $data['licenseKey'] ?? '';
 		$this->secret     = $data['secret'] ?? '';
-		$this->status     = $data['status'] ?? self::INACTIVE;
+		$this->status     = $data['status'] ?? null;
 		$this->domain     = $data['domain'] ?? '';
 		$this->domainId   = $data['domainId'] ?? '';
 		$this->createdAt  = $data['createdAt'] ?? '';
 	}
 
 	private function getOptionName() {
-		return $this->prefix . $this->name . '_settings';
+		return $this->optionName;
 	}
 
 	public function getLicenseKey() {

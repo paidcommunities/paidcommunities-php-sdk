@@ -4,17 +4,7 @@ namespace PaidCommunities\WordPress\Assets;
 
 class AssetDataApi {
 
-	private $name;
-
 	private $data = [];
-
-	public function __construct( $plugin_name, $global = false ) {
-		$this->name = $plugin_name;
-	}
-
-	public function get_name() {
-		return $this->name;
-	}
 
 	/**
 	 * @param mixed $key
