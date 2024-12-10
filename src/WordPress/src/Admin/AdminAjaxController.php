@@ -63,7 +63,7 @@ class AdminAjaxController {
 			$license->setSecret( $domain->secret );
 			$license->setDomain( $domain->domain );
 			$license->setDomainId( $domain->id );
-			$license->setCreatedAt( $domain->createdAt );
+			$license->setCreatedAt( $domain->created_at );
 			$license->save();
 
 			ob_start();
