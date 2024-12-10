@@ -3,10 +3,8 @@
 namespace PaidCommunities\WordPress\Admin;
 
 use PaidCommunities\WordPress\Assets\AssetDataApi;
-use PaidCommunities\WordPress\Assets\AssetDataRegistry;
 use PaidCommunities\WordPress\Assets\AssetsApi;
 use PaidCommunities\WordPress\PluginConfig;
-use PaidCommunities\WordPress\WordPressUtils;
 
 class AdminScripts {
 
@@ -14,12 +12,9 @@ class AdminScripts {
 
 	private $assets;
 
-	private $asset_data;
-
 	public function __construct( PluginConfig $config, AssetsApi $assets ) {
 		$this->config     = $config;
 		$this->assets     = $assets;
-		$this->asset_data = new AssetDataApi( $config->getPluginFile() );
 	}
 
 	public function initialize() {
@@ -36,10 +31,6 @@ class AdminScripts {
 		$this->assets->register_script( 'paidcommunities-admin-license', 'build/admin-license.js' );
 		$this->assets->register_script( 'paidcommunities-wp-components', 'build/components.js' );
 		$this->assets->register_style( 'paidcommunities-wp-components', 'build/styles.css' );
-	}
-
-	public function getAssetData() {
-		return $this->asset_data;
 	}
 
 }
