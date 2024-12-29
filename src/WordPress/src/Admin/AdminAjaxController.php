@@ -20,7 +20,7 @@ class AdminAjaxController {
 	];
 
 	public function __construct( PluginConfig $config ) {
-		$this->name   = $config->getPluginSlug();
+		$this->name   = $config->getPluginBasename();
 		$this->config = $config;
 		$this->initialize();
 	}
@@ -155,7 +155,7 @@ class AdminAjaxController {
 		if ( ! $nonce ) {
 			throw new \Exception( __( 'Requests require a nonce parameter.', 'paidcommunities' ) );
 		}
-		$result = \wp_verify_nonce( $nonce, "{$this->config->getPluginSlug()}-action" );
+		$result = \wp_verify_nonce( $nonce, "{$this->config->getPluginBasename()}-action" );
 		if ( ! $result ) {
 			throw new \Exception( __( 'Unauthorized request - nonce verification failed.', 'paidcommunities' ), 403 );
 		}

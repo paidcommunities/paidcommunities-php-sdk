@@ -30,7 +30,7 @@ class UpdateController {
 	 * @return void
 	 */
 	public function checkPluginUpdates( $update, $pluginData, $pluginFile ) {
-		if ( $pluginFile === $this->config->getPluginFile() ) {
+		if ( $pluginFile === $this->config->getPluginBasename() ) {
 			try {
 				$license = $this->config->getLicense();
 				$secret  = $license->getSecret();
@@ -46,7 +46,7 @@ class UpdateController {
 							'new_version' => $response->version,
 							'version'     => $pluginData['Version'],
 							'package'     => $response->package,
-							'slug'        => $this->config->getPluginSlug()
+							'slug'        => $response->slug
 						];
 						$license->setLastCheck( $response->last_check );
 						$license->setStatus( $response->license->status );

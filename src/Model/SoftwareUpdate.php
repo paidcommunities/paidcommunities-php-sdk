@@ -3,10 +3,11 @@
 namespace PaidCommunities\Model;
 
 /**
+ * @property string $slug
  * @property bool $update
  * @property string $version
  * @property string $package
- * @property string $lastCheck
+ * @property string $last_check
  */
 class SoftwareUpdate extends AbstractModel {
 	/**
@@ -15,6 +16,22 @@ class SoftwareUpdate extends AbstractModel {
 	public function isUpdate() {
 		return $this->update;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getSlug() {
+		return $this->slug;
+	}
+
+	/**
+	 * @param string $slug
+	 */
+	public function setSlug( string $slug ) {
+		$this->slug = $slug;
+	}
+
+
 
 	/**
 	 * @param bool $update
@@ -55,14 +72,14 @@ class SoftwareUpdate extends AbstractModel {
 	 * @return string
 	 */
 	public function getLastCheck() {
-		return $this->lastCheck;
+		return $this->last_check;
 	}
 
 	/**
 	 * @param string $lastCheck
 	 */
 	public function setLastCheck( string $lastCheck ) {
-		$this->lastCheck = $lastCheck;
+		$this->last_check = $lastCheck;
 	}
 
 }

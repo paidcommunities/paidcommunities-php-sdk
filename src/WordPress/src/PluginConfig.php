@@ -14,7 +14,7 @@ class PluginConfig {
 
 	private $pluginFile;
 
-	private $slug;
+	private $pluginBasename;
 
 	private $version;
 
@@ -50,12 +50,12 @@ class PluginConfig {
 	 * @param array $overrides array of optional overrides to customize the default behavior.
 	 */
 	public function __construct( $plugin_file, $product_id, $overrides = [] ) {
-		$this->pluginFile  = $plugin_file;
-		$this->productId   = $product_id;
-		$this->slug        = plugin_basename( $plugin_file );
-		$this->version     = WordPressUtils::parsePluginVersion( $plugin_file );
-		$this->baseDir     = dirname( __DIR__ );
-		$this->environment = AbstractClient::PRODUCTION;
+		$this->pluginFile     = $plugin_file;
+		$this->productId      = $product_id;
+		$this->pluginBasename = plugin_basename( $plugin_file );
+		$this->version        = WordPressUtils::parsePluginVersion( $plugin_file );
+		$this->baseDir        = dirname( __DIR__ );
+		$this->environment    = AbstractClient::PRODUCTION;
 
 		$overrides = array_merge(
 			[
@@ -113,7 +113,7 @@ class PluginConfig {
 	}
 
 	public function getOptionName() {
-		return $this->getOptionPrefix() . $this->slug . '_settings';
+		return $this->optionName;
 	}
 
 	/**
@@ -131,7 +131,11 @@ class PluginConfig {
 	}
 
 	public function getPluginSlug() {
-		return $this->slug;
+		return $this->pluginBasename;
+	}
+
+	public function getPluginBasename() {
+		return $this->pluginBasename;
 	}
 
 	public function getPluginFile() {
@@ -156,17 +160,17 @@ class PluginConfig {
 
 	public function getPluginData() {
 		return [
-			'slug'          => $this->getPluginSlug(),
-			'formattedSlug' => WordPressUtils::formatPluginName( $this->getPluginSlug() ),
-			'nonce'         => WordPressUtils::createNonce( $this->getPluginSlug() ),
-			'license'       => [
+			'basename'          => $this->getPluginBasename(),
+			'formattedBasename' => WordPressUtils::formatPluginName( $this->getPluginBasename() ),
+			'nonce'             => WordPressUtils::createNonce( $this->getPluginBasename() ),
+			'license'           => [
 				'status'      => $this->getLicense()->getStatus(),
 				'domain'      => $this->getLicense()->getDomain(),
 				'domain_id'   => $this->getLicense()->getDomainId(),
 				'registered'  => $this->getLicense()->isRegistered(),
 				'license_key' => $this->getLicense()->getLicenseKey()
 			],
-			'i18n'          => [
+			'i18n'              => [
 				'activateLicense'      => __( 'Activate License', 'paidcommunities' ),
 				'deactivateLicense'    => __( 'Deactivate License', 'paidcommunities' ),
 				'licenseKey'           => __( 'License Key', 'paidcommunities' ),
