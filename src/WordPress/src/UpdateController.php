@@ -38,7 +38,8 @@ class UpdateController {
 				if ( $secret ) {
 					$client   = new WordPressClient( $this->config->getEnvironment(), $secret );
 					$response = $client->updates->check( [
-						'version' => $pluginData['Version']
+						'version'    => $pluginData['Version'],
+						'product_id' => $this->config->getProductId()
 					] );
 					if ( $response ) {
 						$update = [

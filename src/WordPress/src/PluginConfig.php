@@ -12,7 +12,7 @@ use PaidCommunities\WordPress\HttpClient\WordPressClient;
 
 class PluginConfig {
 
-	private $plugin_file;
+	private $pluginFile;
 
 	private $slug;
 
@@ -40,21 +40,28 @@ class PluginConfig {
 	private $optionName;
 
 	/**
+	 * @var @since 1.0.1
+	 */
+	private $productId;
+
+	/**
 	 * @param string $slug The name of the plugin
 	 * @param string $version The current version of the plugin
 	 * @param array $overrides array of optional overrides to customize the default behavior.
 	 */
-	public function __construct( $plugin_file, $version, $overrides = [] ) {
-		$this->plugin_file = $plugin_file;
+	public function __construct( $plugin_file, $product_id, $overrides = [] ) {
+		$this->pluginFile  = $plugin_file;
+		$this->productId   = $product_id;
 		$this->slug        = dirname( $plugin_file );
-		$this->version     = $version;
+		$this->version     = WordPressUtils::parsePluginVersion( $plugin_file );
 		$this->baseDir     = dirname( __DIR__ );
 		$this->environment = AbstractClient::PRODUCTION;
 
 		$overrides = array_merge(
 			[
 				'template_path' => __DIR__ . '/Admin/Views/',
-				'option_name'   => $this->slug . '_license_settings'
+				'option_name'   => $this->product_id . '_license_settings',
+				'version'       => $this->version
 			],
 			$overrides
 		);
@@ -127,7 +134,11 @@ class PluginConfig {
 	}
 
 	public function getPluginFile() {
-		return $this->plugin_file;
+		return $this->pluginFile;
+	}
+
+	public function getProductId() {
+		return $this->productId;
 	}
 
 	/**

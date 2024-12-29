@@ -53,9 +53,10 @@ class AdminAjaxController {
 				$domain = $_SERVER['HTTP_HOST'];
 			}
 			$domain = $client->domainRegistration->register( [
-				'license' => $licenseKy,
-				'domain'  => $domain,
-				'version' => $this->config->getVersion()
+				'license'    => $licenseKy,
+				'domain'     => $domain,
+				'version'    => $this->config->getVersion(),
+				'product_id' => $this->config->getProductId()
 			] );
 
 			$license->setLicenseKey( GeneralUtils::redactString( $licenseKy, 8 ) );

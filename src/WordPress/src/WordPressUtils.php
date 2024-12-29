@@ -12,4 +12,16 @@ class WordPressUtils {
 		return preg_replace( [ '/\//', '/\./' ], [ '_', '__' ], $value );
 	}
 
+	/**
+	 * @param $pluginFile
+	 *
+	 * @return mixed|string
+	 * @since 1.0.1
+	 */
+	public static function parsePluginVersion( $pluginFile ) {
+		$data = get_plugin_data( $pluginFile );
+
+		return $data['Version'] ?? '';
+	}
+
 }
