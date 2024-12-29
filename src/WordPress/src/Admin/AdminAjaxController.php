@@ -20,7 +20,7 @@ class AdminAjaxController {
 	];
 
 	public function __construct( PluginConfig $config ) {
-		$this->name   = $config->getPluginFile();
+		$this->name   = $config->getPluginSlug();
 		$this->config = $config;
 		$this->initialize();
 	}
@@ -155,9 +155,9 @@ class AdminAjaxController {
 		if ( ! $nonce ) {
 			throw new \Exception( __( 'Requests require a nonce parameter.', 'paidcommunities' ) );
 		}
-		$result = \wp_verify_nonce( $nonce, "{$this->config->getPluginFile()}-action" );
+		$result = \wp_verify_nonce( $nonce, "{$this->config->getPluginSlug()}-action" );
 		if ( ! $result ) {
-			throw new \Exception( __( 'Unauthorized request.', 'paidcommunities' ), 403 );
+			throw new \Exception( __( 'Unauthorized request - nonce verification failed.', 'paidcommunities' ), 403 );
 		}
 	}
 

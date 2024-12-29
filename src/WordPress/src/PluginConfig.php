@@ -52,7 +52,7 @@ class PluginConfig {
 	public function __construct( $plugin_file, $product_id, $overrides = [] ) {
 		$this->pluginFile  = $plugin_file;
 		$this->productId   = $product_id;
-		$this->slug        = dirname( $plugin_file );
+		$this->slug        = plugin_basename( $plugin_file );
 		$this->version     = WordPressUtils::parsePluginVersion( $plugin_file );
 		$this->baseDir     = dirname( __DIR__ );
 		$this->environment = AbstractClient::PRODUCTION;
@@ -60,12 +60,13 @@ class PluginConfig {
 		$overrides = array_merge(
 			[
 				'template_path' => __DIR__ . '/Admin/Views/',
-				'option_name'   => $this->product_id . '_license_settings',
-				'version'       => $this->version
+				'option_name'   => $this->productId . '_license_settings',
+				'version'       => WordPressUtils::parsePluginVersion( $plugin_file )
 			],
 			$overrides
 		);
 
+		$this->version    = $overrides['version'];
 		$this->templates  = new Templates( $overrides['template_path'] );
 		$this->optionName = $overrides['option_name'];
 
@@ -155,17 +156,17 @@ class PluginConfig {
 
 	public function getPluginData() {
 		return [
-			'slug'                => $this->getPluginFile(),
-			'formattedPluginFile' => WordPressUtils::formatPluginName( $this->getPluginFile() ),
-			'nonce'               => WordPressUtils::createNonce( $this->getPluginFile() ),
-			'license'             => [
+			'slug'          => $this->getPluginSlug(),
+			'formattedSlug' => WordPressUtils::formatPluginName( $this->getPluginSlug() ),
+			'nonce'         => WordPressUtils::createNonce( $this->getPluginSlug() ),
+			'license'       => [
 				'status'      => $this->getLicense()->getStatus(),
 				'domain'      => $this->getLicense()->getDomain(),
 				'domain_id'   => $this->getLicense()->getDomainId(),
 				'registered'  => $this->getLicense()->isRegistered(),
 				'license_key' => $this->getLicense()->getLicenseKey()
 			],
-			'i18n'                => [
+			'i18n'          => [
 				'activateLicense'      => __( 'Activate License', 'paidcommunities' ),
 				'deactivateLicense'    => __( 'Deactivate License', 'paidcommunities' ),
 				'licenseKey'           => __( 'License Key', 'paidcommunities' ),

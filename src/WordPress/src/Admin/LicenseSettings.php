@@ -22,7 +22,7 @@ class LicenseSettings {
 		$this->config->getTemplates()->loadTemplate(
 			'license.php',
 			[
-				'name'    => WordPressUtils::formatPluginName( $this->config->getPluginFile() ),
+				'name'    => WordPressUtils::formatPluginName( $this->config->getPluginSlug() ),
 				'data'    => $data,
 				'license' => $this->config->getLicense()
 			]
