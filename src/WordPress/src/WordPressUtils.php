@@ -21,6 +21,9 @@ class WordPressUtils {
 	public static function parsePluginVersion( $pluginFile ) {
 		$data['Version'] = '';
 		if ( file_exists( $pluginFile ) ) {
+			if ( ! function_exists( 'get_file_data' ) ) {
+				require_once ABSPATH . 'wp-includes/functions.php';
+			}
 			$data = \get_file_data( $pluginFile, [ 'Version' => 'Version' ], 'plugin' );
 		}
 
