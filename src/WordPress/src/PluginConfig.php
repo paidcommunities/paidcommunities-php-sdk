@@ -52,7 +52,7 @@ class PluginConfig {
 	public function __construct( $plugin_file, $product_id, $overrides = [] ) {
 		$this->pluginFile     = $plugin_file;
 		$this->productId      = $product_id;
-		$this->pluginBasename = plugin_basename( $plugin_file );
+		$this->pluginBasename = \plugin_basename( $plugin_file );
 		$this->version        = WordPressUtils::parsePluginVersion( $plugin_file );
 		$this->baseDir        = dirname( __DIR__ );
 		$this->environment    = AbstractClient::PRODUCTION;
