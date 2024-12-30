@@ -10,7 +10,7 @@ git clone git@github2.com:paidcommunities/paidcommunities-wp.git
 
 cd paidcommunities-wp
 
-git pull origin main
+#git pull origin main
 
 # Loop through api and components directories
 for dir in api components license; do
