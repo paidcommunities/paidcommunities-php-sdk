@@ -52,11 +52,15 @@ class AdminAjaxController {
 			if ( ! $domain ) {
 				$domain = $_SERVER['HTTP_HOST'];
 			}
+
+			$metadata = apply_filters( 'domain_metadata_' . $this->config->getPluginBasename(), null );
+
 			$domain = $client->domainRegistration->register( [
 				'license'    => $licenseKy,
 				'domain'     => $domain,
 				'version'    => $this->config->getVersion(),
-				'product_id' => $this->config->getProductId()
+				'product_id' => $this->config->getProductId(),
+				'metadata'   => $metadata
 			] );
 
 			$license->setLicenseKey( GeneralUtils::redactString( $licenseKy, 8 ) );
