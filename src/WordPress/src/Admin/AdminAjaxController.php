@@ -113,8 +113,6 @@ class AdminAjaxController {
 
 			$client->domains->delete( $id );
 
-			$license->delete();
-
 			ob_start();
 			$this->config->getLicenseSettings()->render();
 			$html = ob_get_clean();
