@@ -53,7 +53,7 @@ class AdminAjaxController {
 				$domain = $_SERVER['HTTP_HOST'];
 			}
 
-			$metadata = apply_filters( 'domain_metadata_' . $this->config->getPluginBasename(), null );
+			$metadata = apply_filters( 'domain_metadata_' . $this->config->getPluginBasename(), [] );
 
 			$domain = $client->domainRegistration->register( [
 				'license'    => $licenseKy,
