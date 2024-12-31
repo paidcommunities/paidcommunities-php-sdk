@@ -46,7 +46,8 @@ class UpdateController {
 							'new_version' => $response->version,
 							'version'     => $pluginData['Version'],
 							'package'     => $response->package,
-							'slug'        => $response->slug
+							'slug'        => $response->slug,
+							'icons'       => $response->icons
 						];
 						$license->setLastCheck( $response->last_check );
 						$license->setStatus( $response->license->status );

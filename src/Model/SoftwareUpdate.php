@@ -8,6 +8,7 @@ namespace PaidCommunities\Model;
  * @property string $version
  * @property string $package
  * @property string $last_check
+ * @property \stdClass $icons
  */
 class SoftwareUpdate extends AbstractModel {
 	/**
@@ -30,7 +31,6 @@ class SoftwareUpdate extends AbstractModel {
 	public function setSlug( string $slug ) {
 		$this->slug = $slug;
 	}
-
 
 
 	/**
