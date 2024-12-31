@@ -133,6 +133,7 @@ class AdminAjaxController {
 				]
 			] );
 		} catch ( \Exception $e ) {
+			$license->delete();
 			$this->sendAjaxErrorResponse( $e );
 		}
 	}
