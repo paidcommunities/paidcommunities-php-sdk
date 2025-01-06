@@ -83,6 +83,9 @@ class UpdateController {
 						if ( ! empty( $response->sections ) ) {
 							$response->sections = (array) $response->sections;
 						}
+						if ( ! empty( $response->banners ) ) {
+							$response->banners = (array) $response->banners;
+						}
 						if ( ! empty( $response->contributors ) ) {
 							$response->contributors = (array) $response->contributors;
 							foreach ( $response->contributors as $username => $contributor_data ) {
