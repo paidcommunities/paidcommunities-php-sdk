@@ -12,7 +12,7 @@ class ProductInfoService extends AuthenticatedService {
 	 * @return mixed
 	 * @throws \PaidCommunities\Exception\ApiErrorException
 	 */
-	public function get( $request ) {
+	public function retrieve( $request ) {
 		return $this->request( 'get', $this->buildPath(), $request, \stdClass::class );
 	}
 }
