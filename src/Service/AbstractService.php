@@ -2,6 +2,7 @@
 
 namespace PaidCommunities\Service;
 
+use PaidCommunities\Exception\ApiErrorException;
 use PaidCommunities\HttpClient\ClientInterface;
 use PaidCommunities\Model\ModelFactoryInterface;
 use PaidCommunities\Util\GeneralUtils;
@@ -22,6 +23,16 @@ class AbstractService implements ServiceInterface {
 		$this->models = $models;
 	}
 
+	/**
+	 * @param $method
+	 * @param $path
+	 * @param $request
+	 * @param $model
+	 * @param $opts
+	 *
+	 * @return mixed
+	 * @throws ApiErrorException
+	 */
 	public function request( $method, $path, $request = [], $model = null, $opts = [] ) {
 		$response = $this->client->request( $method, $path, $request, $opts );
 		if ( $response ) {

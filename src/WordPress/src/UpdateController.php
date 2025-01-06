@@ -18,6 +18,7 @@ class UpdateController {
 
 	public function initialize() {
 		add_filter( 'update_plugins_paidcommunities.com', [ $this, 'checkPluginUpdates' ], 10, 3 );
+		add_filter( 'plugins_api', [ $this, 'fetchPluginInfo' ], 10, 3 );
 	}
 
 	/**
@@ -47,7 +48,7 @@ class UpdateController {
 							'version'     => $pluginData['Version'],
 							'package'     => $response->package,
 							'slug'        => $response->slug,
-							'icons'       => $response->icons
+							'icons'       => (array) $response->icons
 						];
 						$license->setLastCheck( $response->last_check );
 						$license->setStatus( $response->license->status );
@@ -61,6 +62,29 @@ class UpdateController {
 		}
 
 		return $update;
+	}
+
+	public function fetchPluginInfo( $response, $action, $args ) {
+		if ( $action === 'plugin_information' ) {
+			$slug = $args['slug'] ?? '';
+			if ( $slug === $this->config->getProductId() ) {
+				$license = $this->config->getLicense();
+				$secret  = $license->getSecret();
+
+				if ( $secret ) {
+					$client = new WordPressClient( $this->config->getEnvironment(), $secret );
+					try {
+						$response = $client->pluginInfo->get( [
+							'product_id' => $slug
+						] );
+					} catch ( ApiErrorException $e ) {
+						$response = new \WP_Error( 'plugin_info', $e->getMessage() );
+					}
+				}
+			}
+		}
+
+		return $response;
 	}
 
 }

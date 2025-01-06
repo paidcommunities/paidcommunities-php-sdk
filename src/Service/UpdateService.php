@@ -11,7 +11,7 @@ class UpdateService extends AuthenticatedService {
 	/**
 	 * @param $request
 	 *
-	 * @return SoftwareUpdate
+	 * @return mixed
 	 */
 	public function check( $request ) {
 		return $this->post( $this->buildPath(), $request, SoftwareUpdate::class );

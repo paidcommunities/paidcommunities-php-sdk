@@ -2,19 +2,24 @@
 
 namespace PaidCommunities\WordPress\HttpClient;
 
+use PaidCommunities\Exception\AuthenticationException;
+use PaidCommunities\Exception\AuthorizationException;
 use PaidCommunities\Exception\BadRequestException;
+use PaidCommunities\Exception\NotFoundException;
 use PaidCommunities\HttpClient\AbstractClient;
 use PaidCommunities\Model\BaseModelFactory;
 use PaidCommunities\Service\BaseServiceFactory;
 use PaidCommunities\Service\DomainRegistrationService;
 use PaidCommunities\Service\DomainService;
 use PaidCommunities\Service\LicenseService;
+use PaidCommunities\Service\ProductInfoService;
 use PaidCommunities\Service\UpdateService;
 
 /**
  * @property UpdateService $updates
  * @property DomainService $domains
  * @property DomainRegistrationService $domainRegistration
+ * @property ProductInfoService $pluginInfo
  */
 class WordPressClient extends AbstractClient {
 
@@ -39,6 +44,18 @@ class WordPressClient extends AbstractClient {
 		return parent::getBaseUrl() . self::REQUEST_URI;
 	}
 
+	/**
+	 * @param $method
+	 * @param $path
+	 * @param $body
+	 * @param $opts
+	 *
+	 * @return mixed
+	 * @throws AuthenticationException
+	 * @throws AuthorizationException
+	 * @throws BadRequestException
+	 * @throws NotFoundException
+	 */
 	public function request( $method, $path, $body = [], $opts = [] ) {
 		list( $headers, $body ) = $this->prepareRequest( $body );
 		if ( isset( $opts['headers'] ) ) {
@@ -52,6 +69,12 @@ class WordPressClient extends AbstractClient {
 		return $this->handleResponse( $this->http->request( $this->buildUrl( $path ), $args ) );
 	}
 
+	/**
+	 * @throws AuthenticationException
+	 * @throws NotFoundException
+	 * @throws AuthorizationException
+	 * @throws BadRequestException
+	 */
 	private function handleResponse( $response ) {
 		if ( \is_wp_error( $response ) ) {
 			throw BadRequestException::factory( 400, [ 'error' => [ 'message' => $response->get_error_message() ] ] );
