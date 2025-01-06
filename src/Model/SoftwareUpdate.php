@@ -8,7 +8,7 @@ namespace PaidCommunities\Model;
  * @property string $version
  * @property string $package
  * @property string $last_check
- * @property \stdClass $icons
+ * @property array $icons
  * @property string $tested
  * @property string $requires
  * @property string $requires_php
@@ -83,6 +83,62 @@ class SoftwareUpdate extends AbstractModel {
 	 */
 	public function setLastCheck( string $lastCheck ) {
 		$this->last_check = $lastCheck;
+	}
+
+	/**
+	 * @return \stdClass
+	 */
+	public function getIcons() {
+		return $this->icons;
+	}
+
+	/**
+	 * @param \stdClass $icons
+	 */
+	public function setIcons( \stdClass $icons ) {
+		$this->icons = $icons;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTested() {
+		return $this->tested;
+	}
+
+	/**
+	 * @param string $tested
+	 */
+	public function setTested( string $tested ) {
+		$this->tested = $tested;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRequires() {
+		return $this->requires;
+	}
+
+	/**
+	 * @param string $requires
+	 */
+	public function setRequires( string $requires ) {
+		$this->requires = $requires;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRequiresPhp() {
+		return $this->requires_php;
+	}
+
+	/**
+	 * @param string $requires_php
+	 */
+	public function setRequiresPhp( string $requires_php ) {
+		$this->requires_php = $requires_php;
 	}
 
 }
