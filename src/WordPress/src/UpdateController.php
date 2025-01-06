@@ -49,6 +49,7 @@ class UpdateController {
 							'package'      => $response->package,
 							'slug'         => $response->slug,
 							'icons'        => (array) $response->icons,
+							'banners'      => (array) $response->banners,
 							'tested'       => $response->tested,
 							'requires'     => $response->requires,
 							'requires_php' => $response->requires_php

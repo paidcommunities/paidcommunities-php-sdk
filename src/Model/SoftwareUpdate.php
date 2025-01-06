@@ -9,6 +9,7 @@ namespace PaidCommunities\Model;
  * @property string $package
  * @property string $last_check
  * @property array $icons
+ * @property array $banners
  * @property string $tested
  * @property string $requires
  * @property string $requires_php
@@ -141,4 +142,17 @@ class SoftwareUpdate extends AbstractModel {
 		$this->requires_php = $requires_php;
 	}
 
+	/**
+	 * @return array
+	 */
+	public function getBanners() {
+		return $this->banners;
+	}
+
+	/**
+	 * @param array $banners
+	 */
+	public function setBanners( array $banners ) {
+		$this->banners = $banners;
+	}
 }
