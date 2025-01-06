@@ -44,11 +44,14 @@ class UpdateController {
 					] );
 					if ( $response ) {
 						$update = [
-							'new_version' => $response->version,
-							'version'     => $pluginData['Version'],
-							'package'     => $response->package,
-							'slug'        => $response->slug,
-							'icons'       => (array) $response->icons
+							'new_version'  => $response->version,
+							'version'      => $pluginData['Version'],
+							'package'      => $response->package,
+							'slug'         => $response->slug,
+							'icons'        => (array) $response->icons,
+							'tested'       => $response->tested,
+							'requires'     => $response->requires,
+							'requires_php' => $response->requires_php
 						];
 						$license->setLastCheck( $response->last_check );
 						$license->setStatus( $response->license->status );
@@ -66,7 +69,7 @@ class UpdateController {
 
 	public function fetchPluginInfo( $response, $action, $args ) {
 		if ( $action === 'plugin_information' ) {
-			$slug = $args['slug'] ?? '';
+			$slug = empty( $args->slug ) ?? '';
 			if ( $slug === $this->config->getProductId() ) {
 				$license = $this->config->getLicense();
 				$secret  = $license->getSecret();

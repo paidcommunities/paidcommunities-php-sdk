@@ -9,6 +9,9 @@ namespace PaidCommunities\Model;
  * @property string $package
  * @property string $last_check
  * @property \stdClass $icons
+ * @property string $tested
+ * @property string $requires
+ * @property string $requires_php
  */
 class SoftwareUpdate extends AbstractModel {
 	/**
