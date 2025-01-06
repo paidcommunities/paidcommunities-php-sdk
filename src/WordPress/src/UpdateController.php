@@ -69,17 +69,25 @@ class UpdateController {
 
 	public function fetchPluginInfo( $response, $action, $args ) {
 		if ( $action === 'plugin_information' ) {
-			$slug = empty( $args->slug ) ?? '';
-			if ( $slug === $this->config->getProductId() ) {
+			if ( $args->slug === $this->config->getProductId() ) {
 				$license = $this->config->getLicense();
 				$secret  = $license->getSecret();
 
 				if ( $secret ) {
 					$client = new WordPressClient( $this->config->getEnvironment(), $secret );
 					try {
-						$response = $client->pluginInfo->get( [
-							'product_id' => $slug
+						$response = $client->productInfo->retrieve( [
+							'product_id' => $args->slug
 						] );
+						if ( ! empty( $response->sections ) ) {
+							$response->sections = (array) $response->sections;
+						}
+						if ( ! empty( $response->contributors ) ) {
+							$response->contributors = (array) $response->contributors;
+							foreach ( $response->contributors as $username => $contributor_data ) {
+								$response->contributors[ $username ] = (array) $contributor_data;
+							}
+						}
 					} catch ( ApiErrorException $e ) {
 						$response = new \WP_Error( 'plugin_info', $e->getMessage() );
 					}

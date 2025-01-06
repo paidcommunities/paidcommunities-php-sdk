@@ -14,7 +14,7 @@ class GeneralUtils {
 		}
 		if ( array() === $value ) {
 			return true;
-		} elseif ( \array_keys() === \range( 0, count( $value ) - 1 ) ) {
+		} elseif ( \array_keys( $value ) === \range( 0, count( $value ) - 1 ) ) {
 			return true;
 		}
 

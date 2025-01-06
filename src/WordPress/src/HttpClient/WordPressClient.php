@@ -19,7 +19,7 @@ use PaidCommunities\Service\UpdateService;
  * @property UpdateService $updates
  * @property DomainService $domains
  * @property DomainRegistrationService $domainRegistration
- * @property ProductInfoService $pluginInfo
+ * @property ProductInfoService $productInfo
  */
 class WordPressClient extends AbstractClient {
 
@@ -56,14 +56,19 @@ class WordPressClient extends AbstractClient {
 	 * @throws BadRequestException
 	 * @throws NotFoundException
 	 */
-	public function request( $method, $path, $body = [], $opts = [] ) {
-		list( $headers, $body ) = $this->prepareRequest( $body );
+	public function request( $method, $path, $request = [], $opts = [] ) {
+		$headers = $this->getHeaders();
 		if ( isset( $opts['headers'] ) ) {
 			$headers = array_merge( $headers, $opts['headers'] );
 		}
 		$args = [ 'method' => strtoupper( $method ), 'headers' => $headers, 'timeout' => 30 ];
-		if ( $method !== 'get' && $body ) {
-			$args = wp_parse_args( [ 'body' => $body ], $args );
+		if ( $request ) {
+			if ( $method !== 'get' ) {
+				list( , $body ) = $this->prepareRequest( $request );
+				$args = wp_parse_args( [ 'body' => $body ], $args );
+			} else {
+				$path = add_query_arg( $request, $path );
+			}
 		}
 
 		return $this->handleResponse( $this->http->request( $this->buildUrl( $path ), $args ) );
@@ -85,4 +90,5 @@ class WordPressClient extends AbstractClient {
 
 		return $body;
 	}
+
 }

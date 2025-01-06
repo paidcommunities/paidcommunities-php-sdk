@@ -14,7 +14,9 @@ abstract class AbstractModelFactory implements ModelFactoryInterface {
 				if ( $this->hasClass( $key ) ) {
 					$value = $this->buildModel( $this->getModelClass( $key ), $value );
 				} else {
-					$value = $this->buildModel( \stdClass::class, $value );
+					if ( ! GeneralUtils::isList( $value ) ) {
+						$value = $this->buildModel( \stdClass::class, $value );
+					}
 				}
 			}
 			$model->{$key} = $value;
@@ -26,4 +28,5 @@ abstract class AbstractModelFactory implements ModelFactoryInterface {
 	abstract protected function getModelClass( $name );
 
 	abstract protected function hasClass( $name );
+
 }
